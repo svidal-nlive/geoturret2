@@ -18,15 +18,15 @@ Pre-implementation scaffold aligned with `PRD.md` & `ROADMAP.md`.
 - Error boundary ring buffer (`src/engine/errorBoundary.ts`)
 - Profiler timings (`enableProfiler()`), object pool (`src/engine/pool.ts`)
 - Golden recording & replay harness (deterministic drift detection)
-- Golden recording & replay harness (deterministic drift detection)
 - Boss patterns (Phase 1 placeholder + spawn variants):
 	- `laser-cross` (timed lifecycle, no spawns; stability baseline)
 	- `safe-lane-volley` (lane hazard volleys; periodic hazardous lane spawns)
 	- `multi-beam-intersect` (rotating beam placeholder with orbit spawns every 40f)
 	- `future-converge` (radial inward waves + convergence pulses; higher spawn volume for stress testing)
+	- `spiral-barrage` (rotating arc bursts every 20f; mixed inward/outward velocities)
 - Long-run accelerated headless simulation harness (`scripts/simCore.ts`, `sim-run.ts`)
 - Determinism verification script (`scripts/sim-verify.ts`) and baseline hash guard (`scripts/sim-baseline.json`, `sim-baseline-check.ts`)
-- Performance baseline tooling (histograms + memory growth) & optional CI enforcement
+- Performance baseline tooling (histograms + memory growth, robust spike trimming, per-seed memory pass) & optional CI enforcement
 - CI stages: lint, typecheck, unit + determinism, long sim verify, baseline hash, golden replay, build, size, perf (optional)
 - ~90% statement coverage (Vitest + v8)
 
@@ -105,15 +105,16 @@ Determinism quick check: reload with same seed and compare logged snapshot `rngS
 
 ### Run Snapshot (v5)
 
-`GameOrchestrator.snapshot()` (schema v5) fields:
+`GameOrchestrator.snapshot()` (schema v6) fields:
 
-- `version`: 5
+- `version`: 6
 - `frame`: number
 - `time`: simulated seconds
 - `rngState`: internal RNG numeric state
 - `registries`: current registry listings (ids + metadata)
 - `registryHash`: djb2 hex digest of sorted registry ids (integrity & drift detection)
-- `summary`: `{ kills, wave, grazeCount, overdriveMeter, overdriveActive, parallaxLayers?, bossActive, bossPattern, bossStartedFrame, bossEndedFrame }` (older v1–v4 snapshots are auto-upgraded; new mandatory boss fields default to inactive/null lifecycle).
+- `summary`: `{ kills, wave, grazeCount, overdriveMeter, overdriveActive, parallaxLayers?, bossActive, bossPattern, bossStartedFrame, bossEndedFrame }` (older v1–v5 snapshots are auto-upgraded; new mandatory boss fields default to inactive/null lifecycle).
+	- `versionMap`: map of `kind:id` → content version for each registry entry (added v6 for future persistence migrations / drift analytics)
 	- Boss patterns always populate lifecycle fields; `future-converge` & others drive spawn deltas validated by `bossPattern.spawnCounts.test.ts`.
 - `parallaxLayers`: persisted parallax layer descriptors (for golden replay parity)
 
@@ -190,6 +191,13 @@ Troubleshooting / tuning:
 Histogram notes: The baseline stores bin counts, bin width, and final cap. Percentiles are computed from cumulative counts; dynamic cap expansion re-bins existing counts approximately (bin center mapping) so prior data still contributes.
 
 Planned enhancement: histogram-based sampling (fixed bins) to avoid storing full sample arrays and enable percentile tightening over time.
+
+Robust spike handling:
+
+- Pass `--robust-spike --spike-trim N` (same flags for `perf:baseline` and `perf:check`) to exclude the top N timing samples per system when deriving / enforcing spike thresholds. This mitigates single outlier noise (e.g., first JIT, sporadic GC) without masking sustained regressions.
+- Baseline stores both `rawMax` and `trimmedTop`; threshold uses trimmed max while retaining raw for audit.
+- Always keep baseline & check invocations aligned (either both robust or both plain) to avoid artificial failures.
+- Use small N (start with 1). If you need >2 consistently, investigate root cause before increasing.
 
 ### Replay Harness & Golden Recordings (v5 Metrics & Boss Enforcement)
 
@@ -294,9 +302,11 @@ Boss patterns introduce deterministic scripted challenge phases launched after t
 | laser-cross | 180 | 3.0 | 1 at start | none | Baseline intro (no spawns to preserve prior goldens) |
 | safe-lane-volley | 240 | 4.0 | 1 at start + per-spawn | Every 30f (0.5s) during frames 60-239 | Alternating hazardous lane (swap at 180f) |
 | multi-beam-intersect | 300 | 5.0 | 1 at start + per-spawn | Every 40f (≈0.667s) during frames 60-299 | Orbiting enemies; rotation direction from RNG |
+| spiral-barrage | 360 | 6.0 | 1 at start + per-burst | Burst every 20f (frames 40-359) | Rotating arc bursts alternating inward/outward velocities |
 
 Seed heuristic (for golden seeds & ad‑hoc runs):
 
+- Seed containing `spiral` → `spiral-barrage`
 - Seed containing `safe` → `safe-lane-volley`
 - Seed containing `multi` → `multi-beam-intersect`
 - Otherwise → `laser-cross`
@@ -319,6 +329,55 @@ Adding a new pattern:
 6. Add golden seed; regenerate goldens with `UPDATE_GOLDENS=1`.
 
 Schema v5 made boss fields mandatory to simplify downstream analysis & golden enforcement.
+
+### GOLDEN_MODE Guard (Deterministic Baseline Freeze)
+
+`GOLDEN_MODE=1` (environment variable) activates a stability layer used by the golden replay test to freeze a curated set of gameplay tuning knobs so that future balance / pacing experiments do not silently drift the committed golden recordings. When enabled:
+
+- Enemy spawn interval & dynamic center‑kill radius schedule use the frozen (current) values.
+- Center arrival kill radius does not reflect any experimental tweaks.
+- Player fire interval and boss damage per bullet remain constant.
+- Graze & hit radii remain at the frozen values.
+- Boss pattern derivation (seed → pattern selection heuristics) is locked.
+
+Design intent: Developers can iterate on balance outside golden mode (normal test runs) without immediately invalidating deterministic artifacts. Golden verification (`golden.replay.test.ts`) forces `GOLDEN_MODE=1` to assert invariants against the stable baseline.
+
+Workflow guidelines:
+
+1. For routine tuning (spawn pacing, radii, damage numbers) adjust only the non‑golden path (leave the guarded block unchanged) and validate behavior via normal tests / manual runs (without `GOLDEN_MODE`).
+2. Once new tuning is approved and you intentionally want it to become the new deterministic baseline: update the guarded constants (or remove the old ones), run `UPDATE_GOLDENS=1 npm test --silent -- golden.replay.test.ts` to regenerate, and commit both the code + updated `golden/runRecordings.json` with rationale.
+3. If adding a new parameter that should remain stable for golden runs, wrap it in the existing `if (process.env.GOLDEN_MODE)` (or equivalent) block in its system file and document it briefly in the commit message.
+4. Never mix unrelated balance experiments with a golden rotation commit; keep rotations reviewable (golden diff should only show intended field changes).
+
+If a future system significantly expands deterministic state (e.g., new boss phases or scoring subsystems) consider adding its critical invariants under the guard before regenerating goldens so that subsequent tuning stays opt‑in.
+
+### Pre-Commit Hook (Local Guardrail)
+
+A lightweight Husky pre-commit hook enforces fast feedback locally:
+
+Steps executed (skipped automatically in CI via `CI` env detection):
+
+1. `npm run lint:ts` – strict TypeScript ESLint (no warnings allowed)
+2. `npm run typecheck` – `tsc --noEmit` to catch type regressions early
+3. `npm run golden:monitor` – regenerates actual recordings under `GOLDEN_MODE=1` + extended metrics and diffs vs committed goldens
+
+Behavior:
+
+- If golden monitor reports drift (prints `DRIFT_DETECTED`) the commit is blocked. Rotate goldens intentionally with:
+	```bash
+	UPDATE_GOLDENS=1 npm run test:golden
+	git add golden/runRecordings.json
+	git commit -m "chore(golden): rotate (reason)"
+	```
+- The hook is deliberately minimal (no full test run) to keep latency low (<2s typical). Full suite still enforced in CI.
+- CI already runs golden diff & monitor; skipping the hook there avoids redundant work.
+
+Adjust / opt-out:
+
+- Set an environment flag for one-off bypass: `SKIP_PRECOMMIT=1 git commit ...` (add conditional logic if desired).
+- Extend the hook to include perf or simulation checks only if you can tolerate added latency.
+
+Rationale: Developers see deterministic drift immediately (especially overdrive / graze / boss lifecycle metrics) before opening a PR, reducing noisy review iterations.
 
 ### Coverage Badge Generation
 

@@ -1,5 +1,7 @@
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+
+# Exit early in CI (CI workflows run full suite & golden diff separately)
+[ -n "$CI" ] && exit 0
 
 # Run fast checks first
 npm run lint:ts || exit 1
