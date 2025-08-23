@@ -158,6 +158,12 @@ npm run perf:regen -- --frames 2400 --seeds a,b,c,d,e --force
 
 Archives stored under `perf-baseline.archive/`.
 
+Prune old archives (keep last 5 by default):
+
+```bash
+npm run archives:prune -- --keep 7
+```
+
 Memory: Baseline script records per-seed heap deltas and derives:
 
 - `memory.delta` (overall run delta threshold)
@@ -215,6 +221,8 @@ npm run golden:rotate -- --cases g1:6,g2:10,g3-parallax:6,g4-grazeOD:8,g5-boss:1
 This wraps `golden-record` + `golden-diff` (diff vs previous archived file) for concise review.
 
 Archived snapshots accumulate (manual pruning safe). CI still enforces the committed canonical `golden/runRecordings.json`.
+
+Prune old golden archives similarly with the same prune command (targets both perf + golden archive dirs).
 
 When introducing or removing seeds ensure ordering consistency (`gN-` monotonic) to keep diffs clean.
 
@@ -320,6 +328,8 @@ npm run coverage:badge
 ```
 
 Updates `coverage-badge.svg` referenced at the top of this README. Commit changes after meaningful coverage shifts. (CI publishes coverage artifact but does not auto-update the badge to avoid autonomous commits.)
+
+On pushes to `main`, a dedicated workflow regenerates the badge; if it changes it is committed automatically with `[skip ci]` to avoid recursive runs.
 
 
 Alternative approaches (e.g. authoring source imports with explicit `.js` or using a bundler) were avoided to keep in-repo source ergonomics and avoid extra build tooling for the minimal deterministic harness.
