@@ -20,7 +20,7 @@ const out = getArg('out', 'golden/runRecordings.actual.json');
 const fixedStep = parseFloat(getArg('step', (1/60).toString()));
 
 const cases = casesArg.split(',').filter(Boolean).map(p => { const [seed, dur] = p.split(':'); return { seed, duration: parseFloat(dur || '6') }; });
-const recordings = cases.map(c => recordRun({ seed: c.seed, duration: c.duration, fixedStep }));
+const recordings = cases.map(c => recordRun({ seed: c.seed, duration: c.duration, fixedStep, withParallax: c.seed.includes('parallax') }));
 fs.mkdirSync(path.dirname(out), { recursive: true });
 fs.writeFileSync(out, JSON.stringify({ version: 1, recordings }, null, 2));
 console.log('[golden-record] wrote', out, 'with', recordings.length, 'recordings');

@@ -72,7 +72,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Generate Actual Golden Snapshot
-        run: npm run golden:record -- --cases g1:6,g2:10,g3-parallax:6,g4-grazeOD:8 --out golden/runRecordings.actual.json
+        run: npm run golden:record -- --cases g1:6,g2:10,g3-parallax:6,g4-grazeOD:8,g5-boss:14,g6-boss-safe:22,g7-boss-multi:26,g8-boss-future:16 --out golden/runRecordings.actual.json
       - name: Golden Diff (concise drift summary)
         run: npm run golden:diff
       - name: Verify Golden Recordings
