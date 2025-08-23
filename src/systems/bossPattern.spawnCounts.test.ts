@@ -92,4 +92,14 @@ describe('boss pattern spawn counts', () => {
     expect(durationFrames).toBeGreaterThanOrEqual(300);
     expect(delta).toBeGreaterThanOrEqual(3); // 6 spawns expected, allow some survivors
   });
+  it('future-converge significantly increases kills vs baseline due to radial & pulse spawns', () => {
+    const duration = 20; // seconds (pattern length 5.5s) allow cleanup
+    const baseline = runBaseline('boss-future-test', duration).kills;
+    const { state, summary } = runWithBoss('boss-future-test', duration);
+    const durationFrames = (summary.bossEndedFrame! - summary.bossStartedFrame!);
+    const delta = state.kills - baseline;
+    expect(durationFrames).toBeGreaterThanOrEqual(330);
+    // Spawns: Phase A: 4 waves *6 =24, Phase B: 4 waves *8=32, Pulse: 2*12=24 => 80 potential kills (some may survive)
+    expect(delta).toBeGreaterThanOrEqual(20); // conservative lower bound
+  });
 });

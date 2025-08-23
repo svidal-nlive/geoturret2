@@ -13,6 +13,12 @@ Pre-implementation scaffold aligned with `PRD.md` & `ROADMAP.md`.
 - Error boundary ring buffer (`src/engine/errorBoundary.ts`)
 - Profiler timings (`enableProfiler()`), object pool (`src/engine/pool.ts`)
 - Golden recording & replay harness (deterministic drift detection)
+- Golden recording & replay harness (deterministic drift detection)
+- Boss patterns (Phase 1 placeholder + spawn variants):
+	- `laser-cross` (timed lifecycle, no spawns; stability baseline)
+	- `safe-lane-volley` (lane hazard volleys; periodic hazardous lane spawns)
+	- `multi-beam-intersect` (rotating beam placeholder with orbit spawns every 40f)
+	- `future-converge` (radial inward waves + convergence pulses; higher spawn volume for stress testing)
 - Long-run accelerated headless simulation harness (`scripts/simCore.ts`, `sim-run.ts`)
 - Determinism verification script (`scripts/sim-verify.ts`) and baseline hash guard (`scripts/sim-baseline.json`, `sim-baseline-check.ts`)
 - Performance baseline tooling (histograms + memory growth) & optional CI enforcement
@@ -100,6 +106,7 @@ Determinism quick check: reload with same seed and compare logged snapshot `rngS
 - `registries`: current registry listings (ids + metadata)
 - `registryHash`: djb2 hex digest of sorted registry ids (integrity & drift detection)
 - `summary`: `{ kills, wave, grazeCount, overdriveMeter, overdriveActive, parallaxLayers?, bossActive, bossPattern, bossStartedFrame, bossEndedFrame }` (older v1–v4 snapshots are auto-upgraded; new mandatory boss fields default to inactive/null lifecycle).
+	- Boss patterns always populate lifecycle fields; `future-converge` & others drive spawn deltas validated by `bossPattern.spawnCounts.test.ts`.
 - `parallaxLayers`: persisted parallax layer descriptors (for golden replay parity)
 
 Helper `createOrchestratorFromSnapshot(snapshot)` rebuilds a fresh orchestrator, registers systems & restores temporal/RNG state after validating registry integrity. Fails fast on `registryHash` mismatch to surface content drift. v5 remains backward-compatible for consumers expecting earlier fields; boss lifecycle fields are always present (inactive/null when absent historically).
