@@ -16,6 +16,16 @@ if (!fs.existsSync(goldenPath)) { console.error('[golden-diff] golden file missi
 const actual = JSON.parse(fs.readFileSync(actualPath, 'utf-8'));
 const golden = JSON.parse(fs.readFileSync(goldenPath, 'utf-8'));
 
+// Enforce full expected case list to catch accidental omissions (can skip via GOLDEN_SKIP_CASE_CHECK=1)
+const expectedSeeds = ['g1','g2','g3-parallax','g4-grazeOD','g5-boss','g6-boss-safe','g7-boss-multi','g8-boss-future'];
+if (!process.env.GOLDEN_SKIP_CASE_CHECK) {
+  const goldenSeeds = golden.recordings.map(r=>r.seed);
+  if (goldenSeeds.join(',') !== expectedSeeds.join(',')) {
+    console.error('[golden-diff] expected seed list mismatch:', goldenSeeds, 'vs expected', expectedSeeds);
+    process.exit(3);
+  }
+}
+
 function summarizeSnapshot(s) {
   return {
     v: s.version,
