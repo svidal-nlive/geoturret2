@@ -374,10 +374,20 @@ Behavior:
 
 Adjust / opt-out:
 
-- Set an environment flag for one-off bypass: `SKIP_PRECOMMIT=1 git commit ...` (add conditional logic if desired).
-- Extend the hook to include perf or simulation checks only if you can tolerate added latency.
+- One-off bypass: `SKIP_PRECOMMIT=1 git commit -m "msg"`.
+- Add a quick perf smoke (≈1s) by opting in: `PRECOMMIT_PERF=1 git commit -m "msg"` (runs `perf:check --frames 300 --seeds a,b`).
+- Permanently disable locally: remove/rename `.husky/pre-commit` (not recommended) or export `SKIP_PRECOMMIT=1` in your shell profile.
+- Tighten or relax perf smoke parameters in the hook if false positives occur (e.g. increase frames or bins for stability).
 
 Rationale: Developers see deterministic drift immediately (especially overdrive / graze / boss lifecycle metrics) before opening a PR, reducing noisy review iterations.
+
+#### Husky Version
+
+Pinned via `devDependencies` to `"husky": "^9.0.0"`. If upgrading to v10+:
+
+1. Remove legacy shim lines (already removed in this repo).
+2. Re-run `npm install` (prepare script re-installs hooks).
+3. Confirm hook still exits early for `CI` / `SKIP_PRECOMMIT` and optional perf smoke remains functional.
 
 ### Coverage Badge Generation
 

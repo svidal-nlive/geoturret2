@@ -1,11 +1,18 @@
 #!/bin/sh
 
-# Exit early in CI (CI workflows run full suite & golden diff separately)
+# Exit early in CI or when user explicitly skips
 [ -n "$CI" ] && exit 0
+[ -n "$SKIP_PRECOMMIT" ] && exit 0
 
 # Run fast checks first
 npm run lint:ts || exit 1
 npm run typecheck || exit 1
+
+# Optional fast perf smoke (user opt-in: PRECOMMIT_PERF=1)
+if [ "$PRECOMMIT_PERF" = "1" ]; then
+  echo "[pre-commit] running perf smoke (frames=300 seeds=a,b)";
+  npm run perf:check -- --frames 300 --seeds a,b --hist-bins 128 --hist-cap 0.1 || exit 1
+fi
 
 # Run golden monitor (non-blocking unless drift outside allowed categories is detected)
 DRIFT_LOG=$(npm run golden:monitor --silent)
