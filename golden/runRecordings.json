@@ -7,7 +7,7 @@
       "duration": 6,
       "fixedStep": 0.016666666666666666,
       "final": {
-        "version": 5,
+        "version": 7,
         "frame": 360,
         "time": 5.999999999999984,
         "rngState": 193872715,
@@ -34,15 +34,33 @@
             "laser-cross",
             "safe-lane-volley",
             "multi-beam-intersect",
-            "future-converge"
+            "future-converge",
+            "spiral-barrage"
           ]
         },
-        "registryHash": "2370592d",
+        "registryHash": "a74727e9",
+        "versionMap": {
+          "enemy:grunt": 1,
+          "enemy:swift": 1,
+          "enemy:tank": 1,
+          "powerup:shield": 1,
+          "powerup:overdrive": 1,
+          "upgrade:damage+": 1,
+          "upgrade:firerate+": 1,
+          "upgrade:spread+": 1,
+          "waveMod:storm": 1,
+          "waveMod:gravity": 1,
+          "bossPattern:laser-cross": 1,
+          "bossPattern:safe-lane-volley": 1,
+          "bossPattern:multi-beam-intersect": 1,
+          "bossPattern:future-converge": 1,
+          "bossPattern:spiral-barrage": 1
+        },
         "summary": {
           "kills": 4,
           "wave": 0,
-          "grazeCount": 2,
-          "overdriveMeter": 0.24000000000000002,
+          "grazeCount": 4,
+          "overdriveMeter": 0.28,
           "overdriveActive": false,
           "bossActive": false,
           "bossPattern": null,
@@ -60,10 +78,10 @@
       "duration": 10,
       "fixedStep": 0.016666666666666666,
       "final": {
-        "version": 5,
+        "version": 7,
         "frame": 600,
         "time": 10.000000000000076,
-        "rngState": 2411272253,
+        "rngState": 1340044394,
         "registries": {
           "enemies": [
             "grunt",
@@ -87,15 +105,33 @@
             "laser-cross",
             "safe-lane-volley",
             "multi-beam-intersect",
-            "future-converge"
+            "future-converge",
+            "spiral-barrage"
           ]
         },
-        "registryHash": "2370592d",
+        "registryHash": "a74727e9",
+        "versionMap": {
+          "enemy:grunt": 1,
+          "enemy:swift": 1,
+          "enemy:tank": 1,
+          "powerup:shield": 1,
+          "powerup:overdrive": 1,
+          "upgrade:damage+": 1,
+          "upgrade:firerate+": 1,
+          "upgrade:spread+": 1,
+          "waveMod:storm": 1,
+          "waveMod:gravity": 1,
+          "bossPattern:laser-cross": 1,
+          "bossPattern:safe-lane-volley": 1,
+          "bossPattern:multi-beam-intersect": 1,
+          "bossPattern:future-converge": 1,
+          "bossPattern:spiral-barrage": 1
+        },
         "summary": {
           "kills": 10,
           "wave": 1,
-          "grazeCount": 2,
-          "overdriveMeter": 0.54,
+          "grazeCount": 8,
+          "overdriveMeter": 0.6600000000000001,
           "overdriveActive": false,
           "bossActive": false,
           "bossPattern": null,
@@ -113,7 +149,7 @@
       "duration": 6,
       "fixedStep": 0.016666666666666666,
       "final": {
-        "version": 5,
+        "version": 7,
         "frame": 360,
         "time": 5.999999999999984,
         "rngState": 1131506719,
@@ -140,15 +176,33 @@
             "laser-cross",
             "safe-lane-volley",
             "multi-beam-intersect",
-            "future-converge"
+            "future-converge",
+            "spiral-barrage"
           ]
         },
-        "registryHash": "2370592d",
+        "registryHash": "a74727e9",
+        "versionMap": {
+          "enemy:grunt": 1,
+          "enemy:swift": 1,
+          "enemy:tank": 1,
+          "powerup:shield": 1,
+          "powerup:overdrive": 1,
+          "upgrade:damage+": 1,
+          "upgrade:firerate+": 1,
+          "upgrade:spread+": 1,
+          "waveMod:storm": 1,
+          "waveMod:gravity": 1,
+          "bossPattern:laser-cross": 1,
+          "bossPattern:safe-lane-volley": 1,
+          "bossPattern:multi-beam-intersect": 1,
+          "bossPattern:future-converge": 1,
+          "bossPattern:spiral-barrage": 1
+        },
         "summary": {
-          "kills": 3,
+          "kills": 1,
           "wave": 0,
           "grazeCount": 1,
-          "overdriveMeter": 0.17,
+          "overdriveMeter": 0.07,
           "overdriveActive": false,
           "bossActive": false,
           "bossPattern": null,
@@ -170,7 +224,7 @@
           ]
         }
       },
-      "kills": 3,
+      "kills": 1,
       "wave": 0
     },
     {
@@ -179,10 +233,10 @@
       "duration": 8,
       "fixedStep": 0.016666666666666666,
       "final": {
-        "version": 5,
+        "version": 7,
         "frame": 480,
         "time": 7.999999999999977,
-        "rngState": 3116193537,
+        "rngState": 3501171838,
         "registries": {
           "enemies": [
             "grunt",
@@ -206,16 +260,34 @@
             "laser-cross",
             "safe-lane-volley",
             "multi-beam-intersect",
-            "future-converge"
+            "future-converge",
+            "spiral-barrage"
           ]
         },
-        "registryHash": "2370592d",
+        "registryHash": "a74727e9",
+        "versionMap": {
+          "enemy:grunt": 1,
+          "enemy:swift": 1,
+          "enemy:tank": 1,
+          "powerup:shield": 1,
+          "powerup:overdrive": 1,
+          "upgrade:damage+": 1,
+          "upgrade:firerate+": 1,
+          "upgrade:spread+": 1,
+          "waveMod:storm": 1,
+          "waveMod:gravity": 1,
+          "bossPattern:laser-cross": 1,
+          "bossPattern:safe-lane-volley": 1,
+          "bossPattern:multi-beam-intersect": 1,
+          "bossPattern:future-converge": 1,
+          "bossPattern:spiral-barrage": 1
+        },
         "summary": {
-          "kills": 5,
+          "kills": 6,
           "wave": 0,
-          "grazeCount": 5,
-          "overdriveMeter": 0,
-          "overdriveActive": true,
+          "grazeCount": 7,
+          "overdriveMeter": 0.44000000000000006,
+          "overdriveActive": false,
           "bossActive": false,
           "bossPattern": null,
           "bossStartedFrame": null,
@@ -223,7 +295,7 @@
           "parallaxLayers": []
         }
       },
-      "kills": 5,
+      "kills": 6,
       "wave": 0
     },
     {
@@ -232,10 +304,10 @@
       "duration": 14,
       "fixedStep": 0.016666666666666666,
       "final": {
-        "version": 5,
+        "version": 7,
         "frame": 840,
         "time": 14.000000000000275,
-        "rngState": 2822200048,
+        "rngState": 3791799449,
         "registries": {
           "enemies": [
             "grunt",
@@ -259,24 +331,42 @@
             "laser-cross",
             "safe-lane-volley",
             "multi-beam-intersect",
-            "future-converge"
+            "future-converge",
+            "spiral-barrage"
           ]
         },
-        "registryHash": "2370592d",
+        "registryHash": "a74727e9",
+        "versionMap": {
+          "enemy:grunt": 1,
+          "enemy:swift": 1,
+          "enemy:tank": 1,
+          "powerup:shield": 1,
+          "powerup:overdrive": 1,
+          "upgrade:damage+": 1,
+          "upgrade:firerate+": 1,
+          "upgrade:spread+": 1,
+          "waveMod:storm": 1,
+          "waveMod:gravity": 1,
+          "bossPattern:laser-cross": 1,
+          "bossPattern:safe-lane-volley": 1,
+          "bossPattern:multi-beam-intersect": 1,
+          "bossPattern:future-converge": 1,
+          "bossPattern:spiral-barrage": 1
+        },
         "summary": {
-          "kills": 13,
+          "kills": 14,
           "wave": 1,
           "grazeCount": 6,
-          "overdriveMeter": 0.7700000000000002,
+          "overdriveMeter": 0.8200000000000003,
           "overdriveActive": false,
           "bossActive": false,
           "bossPattern": "laser-cross",
           "bossStartedFrame": 0,
-          "bossEndedFrame": 816,
+          "bossEndedFrame": 771,
           "parallaxLayers": []
         }
       },
-      "kills": 13,
+      "kills": 14,
       "wave": 1
     },
     {
@@ -285,10 +375,10 @@
       "duration": 22,
       "fixedStep": 0.016666666666666666,
       "final": {
-        "version": 5,
+        "version": 7,
         "frame": 1320,
         "time": 22.000000000000032,
-        "rngState": 1734825126,
+        "rngState": 2811606919,
         "registries": {
           "enemies": [
             "grunt",
@@ -312,24 +402,42 @@
             "laser-cross",
             "safe-lane-volley",
             "multi-beam-intersect",
-            "future-converge"
+            "future-converge",
+            "spiral-barrage"
           ]
         },
-        "registryHash": "2370592d",
+        "registryHash": "a74727e9",
+        "versionMap": {
+          "enemy:grunt": 1,
+          "enemy:swift": 1,
+          "enemy:tank": 1,
+          "powerup:shield": 1,
+          "powerup:overdrive": 1,
+          "upgrade:damage+": 1,
+          "upgrade:firerate+": 1,
+          "upgrade:spread+": 1,
+          "waveMod:storm": 1,
+          "waveMod:gravity": 1,
+          "bossPattern:laser-cross": 1,
+          "bossPattern:safe-lane-volley": 1,
+          "bossPattern:multi-beam-intersect": 1,
+          "bossPattern:future-converge": 1,
+          "bossPattern:spiral-barrage": 1
+        },
         "summary": {
-          "kills": 30,
+          "kills": 33,
           "wave": 2,
-          "grazeCount": 10,
+          "grazeCount": 14,
           "overdriveMeter": 0,
           "overdriveActive": false,
           "bossActive": false,
           "bossPattern": "safe-lane-volley",
           "bossStartedFrame": 0,
-          "bossEndedFrame": 858,
+          "bossEndedFrame": 828,
           "parallaxLayers": []
         }
       },
-      "kills": 30,
+      "kills": 33,
       "wave": 2
     },
     {
@@ -338,10 +446,10 @@
       "duration": 26,
       "fixedStep": 0.016666666666666666,
       "final": {
-        "version": 5,
+        "version": 7,
         "frame": 1560,
         "time": 25.999999999999805,
-        "rngState": 516344632,
+        "rngState": 3127471745,
         "registries": {
           "enemies": [
             "grunt",
@@ -365,24 +473,42 @@
             "laser-cross",
             "safe-lane-volley",
             "multi-beam-intersect",
-            "future-converge"
+            "future-converge",
+            "spiral-barrage"
           ]
         },
-        "registryHash": "2370592d",
+        "registryHash": "a74727e9",
+        "versionMap": {
+          "enemy:grunt": 1,
+          "enemy:swift": 1,
+          "enemy:tank": 1,
+          "powerup:shield": 1,
+          "powerup:overdrive": 1,
+          "upgrade:damage+": 1,
+          "upgrade:firerate+": 1,
+          "upgrade:spread+": 1,
+          "waveMod:storm": 1,
+          "waveMod:gravity": 1,
+          "bossPattern:laser-cross": 1,
+          "bossPattern:safe-lane-volley": 1,
+          "bossPattern:multi-beam-intersect": 1,
+          "bossPattern:future-converge": 1,
+          "bossPattern:spiral-barrage": 1
+        },
         "summary": {
-          "kills": 34,
+          "kills": 37,
           "wave": 2,
           "grazeCount": 12,
-          "overdriveMeter": 0.34,
+          "overdriveMeter": 0.3,
           "overdriveActive": false,
           "bossActive": false,
           "bossPattern": "multi-beam-intersect",
           "bossStartedFrame": 0,
-          "bossEndedFrame": 1034,
+          "bossEndedFrame": 970,
           "parallaxLayers": []
         }
       },
-      "kills": 34,
+      "kills": 37,
       "wave": 2
     },
     {
@@ -391,10 +517,10 @@
       "duration": 16,
       "fixedStep": 0.016666666666666666,
       "final": {
-        "version": 5,
+        "version": 7,
         "frame": 960,
         "time": 16.000000000000373,
-        "rngState": 3880419604,
+        "rngState": 3555254157,
         "registries": {
           "enemies": [
             "grunt",
@@ -418,25 +544,114 @@
             "laser-cross",
             "safe-lane-volley",
             "multi-beam-intersect",
-            "future-converge"
+            "future-converge",
+            "spiral-barrage"
           ]
         },
-        "registryHash": "2370592d",
+        "registryHash": "a74727e9",
+        "versionMap": {
+          "enemy:grunt": 1,
+          "enemy:swift": 1,
+          "enemy:tank": 1,
+          "powerup:shield": 1,
+          "powerup:overdrive": 1,
+          "upgrade:damage+": 1,
+          "upgrade:firerate+": 1,
+          "upgrade:spread+": 1,
+          "waveMod:storm": 1,
+          "waveMod:gravity": 1,
+          "bossPattern:laser-cross": 1,
+          "bossPattern:safe-lane-volley": 1,
+          "bossPattern:multi-beam-intersect": 1,
+          "bossPattern:future-converge": 1,
+          "bossPattern:spiral-barrage": 1
+        },
         "summary": {
-          "kills": 43,
-          "wave": 3,
-          "grazeCount": 15,
+          "kills": 17,
+          "wave": 1,
+          "grazeCount": 10,
           "overdriveMeter": 0,
           "overdriveActive": true,
-          "bossActive": false,
+          "bossActive": true,
           "bossPattern": "future-converge",
           "bossStartedFrame": 0,
-          "bossEndedFrame": 906,
+          "bossEndedFrame": null,
           "parallaxLayers": []
         }
       },
-      "kills": 43,
-      "wave": 3
+      "kills": 17,
+      "wave": 1
+    },
+    {
+      "version": 1,
+      "seed": "g9-boss-spiral",
+      "duration": 20,
+      "fixedStep": 0.016666666666666666,
+      "final": {
+        "version": 7,
+        "frame": 1200,
+        "time": 20.000000000000146,
+        "rngState": 1563111862,
+        "registries": {
+          "enemies": [
+            "grunt",
+            "swift",
+            "tank"
+          ],
+          "powerups": [
+            "shield",
+            "overdrive"
+          ],
+          "upgrades": [
+            "damage+",
+            "firerate+",
+            "spread+"
+          ],
+          "waveMods": [
+            "storm",
+            "gravity"
+          ],
+          "bossPatterns": [
+            "laser-cross",
+            "safe-lane-volley",
+            "multi-beam-intersect",
+            "future-converge",
+            "spiral-barrage"
+          ]
+        },
+        "registryHash": "a74727e9",
+        "versionMap": {
+          "enemy:grunt": 1,
+          "enemy:swift": 1,
+          "enemy:tank": 1,
+          "powerup:shield": 1,
+          "powerup:overdrive": 1,
+          "upgrade:damage+": 1,
+          "upgrade:firerate+": 1,
+          "upgrade:spread+": 1,
+          "waveMod:storm": 1,
+          "waveMod:gravity": 1,
+          "bossPattern:laser-cross": 1,
+          "bossPattern:safe-lane-volley": 1,
+          "bossPattern:multi-beam-intersect": 1,
+          "bossPattern:future-converge": 1,
+          "bossPattern:spiral-barrage": 1
+        },
+        "summary": {
+          "kills": 63,
+          "wave": 4,
+          "grazeCount": 40,
+          "overdriveMeter": 0,
+          "overdriveActive": true,
+          "bossActive": false,
+          "bossPattern": "spiral-barrage",
+          "bossStartedFrame": 0,
+          "bossEndedFrame": 973,
+          "parallaxLayers": []
+        }
+      },
+      "kills": 63,
+      "wave": 4
     }
   ]
 }

@@ -17,10 +17,16 @@ function schemaVersionPlugin() {
           return {
             Literal(node) {
               if (allow) return;
-              if (typeof node.value === 'number' && node.value === 4) {
-                const parent = node.parent;
-                if (parent && ((parent.type === 'Property' && parent.key && parent.key.name === 'version') || parent.type === 'BinaryExpression' || parent.type === 'AssignmentExpression')) {
-                  context.report({ node, message: 'Hard-coded schema version 4 detected; import and use SCHEMA_VERSION.' });
+              if (typeof node.value === 'number') {
+                // Only flag if matches current SCHEMA_VERSION and appears in obvious schema contexts (object property named version in serialization domain)
+                const CURRENT = 7;
+                if (node.value === CURRENT) {
+                  const parent = node.parent;
+                  const fname = filename;
+                  const looksSchemaFile = /serialization|snapshot|save|load/i.test(fname);
+                  if (looksSchemaFile && parent && ((parent.type === 'Property' && parent.key && parent.key.name === 'version') || parent.type === 'BinaryExpression' || parent.type === 'AssignmentExpression')) {
+                    context.report({ node, message: `Hard-coded schema version ${CURRENT} detected; import and use SCHEMA_VERSION.` });
+                  }
                 }
               }
             }

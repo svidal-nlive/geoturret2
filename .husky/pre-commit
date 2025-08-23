@@ -1,0 +1,19 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Run fast checks first
+npm run lint:ts || exit 1
+npm run typecheck || exit 1
+
+# Run golden monitor (non-blocking unless drift outside allowed categories is detected)
+DRIFT_LOG=$(npm run golden:monitor --silent)
+echo "$DRIFT_LOG"
+
+# Block if monitor reported drift
+echo "$DRIFT_LOG" | grep -E "DRIFT_DETECTED" >/dev/null 2>&1 && {
+  echo "\n✖ Golden drift detected. Review above diff or run: npm run golden:diff" >&2
+  echo "Accept intentionally by rotating goldens: UPDATE_GOLDENS=1 npm run test:golden" >&2
+  exit 1
+}
+
+exit 0
