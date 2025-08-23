@@ -1,5 +1,9 @@
 # Geoturret 2 (Alpha Planning Scaffold)
 
+[![CI](https://github.com/svidal-nlive/geoturret2/actions/workflows/ci.yml/badge.svg)](https://github.com/svidal-nlive/geoturret2/actions/workflows/ci.yml)
+[![Coverage](./coverage-badge.svg)](#coverage-badge-generation)
+
+
 Pre-implementation scaffold aligned with `PRD.md` & `ROADMAP.md`.
 
 ## Status (Key Implemented)
@@ -32,12 +36,15 @@ npm install
 npm run lint
 npm run typecheck
 npm test
+npm run coverage:badge      # run coverage & update coverage-badge.svg
 npm run test:sim:long        # accelerated wave 1->15 JSON output
 npm run test:sim:verify      # determinism (same seed twice) + seed differentiation
 npm run test:sim:baseline    # assert current gameplay hash matches committed baseline
 npm run build
 npm run perf:baseline   # generate/update perf-baseline.json (profiling stats & suggested thresholds)
 npm run perf:check      # enforce thresholds using perf-baseline.json
+npm run perf:regen      # archive previous + regenerate with diff summary (wrapper)
+npm run golden:rotate   # archive & regenerate golden set with new --cases list
 ```
 
 ## Deterministic Simulation & Baseline
@@ -141,6 +148,16 @@ Environment variables:
 
 Regenerate baseline after intentional perf changes, review diffs, and commit updated `perf-baseline.json` with rationale.
 
+Wrapper helper (archives previous, shows per-system threshold deltas, guards against overly aggressive tightening):
+
+```bash
+npm run perf:regen -- --frames 2400 --seeds a,b,c,d,e
+# If you intentionally tightened >50% some thresholds:
+npm run perf:regen -- --frames 2400 --seeds a,b,c,d,e --force
+```
+
+Archives stored under `perf-baseline.archive/`.
+
 Memory: Baseline script records per-seed heap deltas and derives:
 
 - `memory.delta` (overall run delta threshold)
@@ -188,6 +205,20 @@ Regenerate intentionally after approved gameplay / balance changes:
 UPDATE_GOLDENS=1 npm test --silent -- golden.replay.test.ts   # or: UPDATE_GOLDENS=1 npm run test:golden
 git add golden/runRecordings.json
 ```
+
+Rotation helper (archives previous golden to `golden/archives/` then regenerates):
+
+```bash
+npm run golden:rotate -- --cases g1:6,g2:10,g3-parallax:6,g4-grazeOD:8,g5-boss:14,g6-boss-safe:22,g7-boss-multi:26,g8-boss-future:16 --message "chore(golden): rotate seeds"
+```
+
+This wraps `golden-record` + `golden-diff` (diff vs previous archived file) for concise review.
+
+Archived snapshots accumulate (manual pruning safe). CI still enforces the committed canonical `golden/runRecordings.json`.
+
+When introducing or removing seeds ensure ordering consistency (`gN-` monotonic) to keep diffs clean.
+
+If you want to experiment without overwriting the canonical file use `golden:record` directly targeting an `.actual.json` path.
 
 CI produces an artifact (`golden-actual`) each run containing a freshly generated `runRecordings.actual.json` so diffs vs committed golden can be inspected without rerunning locally.
 
@@ -279,6 +310,16 @@ Adding a new pattern:
 6. Add golden seed; regenerate goldens with `UPDATE_GOLDENS=1`.
 
 Schema v5 made boss fields mandatory to simplify downstream analysis & golden enforcement.
+
+### Coverage Badge Generation
+
+Local coverage badge (statements %) generated via:
+
+```bash
+npm run coverage:badge
+```
+
+Updates `coverage-badge.svg` referenced at the top of this README. Commit changes after meaningful coverage shifts. (CI publishes coverage artifact but does not auto-update the badge to avoid autonomous commits.)
 
 
 Alternative approaches (e.g. authoring source imports with explicit `.js` or using a bundler) were avoided to keep in-repo source ergonomics and avoid extra build tooling for the minimal deterministic harness.
