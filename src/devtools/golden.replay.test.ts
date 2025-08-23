@@ -16,6 +16,7 @@ const CASES = [
   ,{ seed: 'g5-boss', duration: 14 }
   ,{ seed: 'g6-boss-safe', duration: 22 }
   ,{ seed: 'g7-boss-multi', duration: 26 }
+  ,{ seed: 'g8-boss-future', duration: 16 }
 ];
 
 describe('golden run recordings', () => {
@@ -42,7 +43,7 @@ describe('golden run recordings', () => {
         expect(a.final.registryHash).toBe(upgradedGoldenFinal.registryHash);
         expect(a.kills).toBe(g.kills);
         expect(a.wave).toBe(g.wave);
-        if (process.env.GOLDEN_REQUIRE_V4) {
+            if (process.env.GOLDEN_REQUIRE_EXTENDED) {
           // Assert new metrics match (current expectation zeros / false unless re-recorded in future)
             expect(a.final.summary.grazeCount ?? 0).toBe(upgradedGoldenFinal.summary.grazeCount ?? 0);
             expect(a.final.summary.overdriveMeter ?? 0).toBe(upgradedGoldenFinal.summary.overdriveMeter ?? 0);

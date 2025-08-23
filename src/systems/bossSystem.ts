@@ -4,12 +4,14 @@ import { BossPattern } from '../content/bossPattern';
 import { createLaserCrossPattern } from '../content/patterns/laserCross';
 import { createSafeLaneVolleyPattern } from '../content/patterns/safeLaneVolley';
 import { createMultiBeamIntersectPattern } from '../content/patterns/multiBeamIntersect';
+import { createFutureConvergePattern } from '../content/patterns/futureConverge';
 
 /** Registry of runtime boss pattern factories keyed by id. (Runtime layer separate from data registries). */
 const patternFactories: Record<string, (state: GameState) => BossPattern> = {
   'laser-cross': (state) => createLaserCrossPattern(state),
   'safe-lane-volley': (state) => createSafeLaneVolleyPattern(state),
-  'multi-beam-intersect': (state) => createMultiBeamIntersectPattern(state)
+  'multi-beam-intersect': (state) => createMultiBeamIntersectPattern(state),
+  'future-converge': (state) => createFutureConvergePattern(state)
 };
 
 export interface BossSystemSummary {
@@ -24,6 +26,7 @@ function derivePatternId(explicit: string | undefined, seed: string | undefined)
   const s = seed || '';
   if (s.includes('safe')) return 'safe-lane-volley';
   if (s.includes('multi')) return 'multi-beam-intersect';
+  if (s.includes('future')) return 'future-converge';
   return 'laser-cross';
 }
 

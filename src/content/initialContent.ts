@@ -26,5 +26,6 @@ Registries.waveMod({ id: 'gravity', description: 'Projectiles arc downward' });
 Registries.bossPattern({ id: 'laser-cross', version: 1 });
 Registries.bossPattern({ id: 'safe-lane-volley', version: 1 });
 Registries.bossPattern({ id: 'multi-beam-intersect', version: 1 });
+Registries.bossPattern({ id: 'future-converge', version: 1 });
 
 // No exports: side-effect module. Import once at startup (or in tests) to populate registries.

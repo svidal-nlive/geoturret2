@@ -12,7 +12,7 @@
   "test:sim:long": "tsx scripts/sim-run.ts",
   "test:sim:verify": "tsx scripts/sim-verify.ts",
   "test:sim:baseline": "tsx scripts/sim-baseline-check.ts",
-  "test:golden": "GOLDEN_REQUIRE_V4=1 vitest run src/devtools/golden.replay.test.ts",
+  "test:golden": "GOLDEN_REQUIRE_EXTENDED=1 vitest run src/devtools/golden.replay.test.ts",
     "perf:baseline": "node scripts/perf-baseline.mjs",
     "perf:check": "node scripts/perf-check.mjs",
     "golden:record": "node scripts/golden-record.mjs",

@@ -63,7 +63,7 @@ jobs:
     needs: build-test
     runs-on: ubuntu-latest
     env:
-      GOLDEN_REQUIRE_V4: 1
+      GOLDEN_REQUIRE_EXTENDED: 1
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

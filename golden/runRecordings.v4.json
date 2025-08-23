@@ -33,11 +33,10 @@
           "bossPatterns": [
             "laser-cross",
             "safe-lane-volley",
-            "multi-beam-intersect",
-            "future-converge"
+            "multi-beam-intersect"
           ]
         },
-        "registryHash": "2370592d",
+        "registryHash": "a707d838",
         "summary": {
           "kills": 4,
           "wave": 0,
@@ -86,11 +85,10 @@
           "bossPatterns": [
             "laser-cross",
             "safe-lane-volley",
-            "multi-beam-intersect",
-            "future-converge"
+            "multi-beam-intersect"
           ]
         },
-        "registryHash": "2370592d",
+        "registryHash": "a707d838",
         "summary": {
           "kills": 10,
           "wave": 1,
@@ -139,11 +137,10 @@
           "bossPatterns": [
             "laser-cross",
             "safe-lane-volley",
-            "multi-beam-intersect",
-            "future-converge"
+            "multi-beam-intersect"
           ]
         },
-        "registryHash": "2370592d",
+        "registryHash": "a707d838",
         "summary": {
           "kills": 3,
           "wave": 0,
@@ -205,11 +202,10 @@
           "bossPatterns": [
             "laser-cross",
             "safe-lane-volley",
-            "multi-beam-intersect",
-            "future-converge"
+            "multi-beam-intersect"
           ]
         },
-        "registryHash": "2370592d",
+        "registryHash": "a707d838",
         "summary": {
           "kills": 5,
           "wave": 0,
@@ -258,11 +254,10 @@
           "bossPatterns": [
             "laser-cross",
             "safe-lane-volley",
-            "multi-beam-intersect",
-            "future-converge"
+            "multi-beam-intersect"
           ]
         },
-        "registryHash": "2370592d",
+        "registryHash": "a707d838",
         "summary": {
           "kills": 13,
           "wave": 1,
@@ -311,11 +306,10 @@
           "bossPatterns": [
             "laser-cross",
             "safe-lane-volley",
-            "multi-beam-intersect",
-            "future-converge"
+            "multi-beam-intersect"
           ]
         },
-        "registryHash": "2370592d",
+        "registryHash": "a707d838",
         "summary": {
           "kills": 30,
           "wave": 2,
@@ -364,11 +358,10 @@
           "bossPatterns": [
             "laser-cross",
             "safe-lane-volley",
-            "multi-beam-intersect",
-            "future-converge"
+            "multi-beam-intersect"
           ]
         },
-        "registryHash": "2370592d",
+        "registryHash": "a707d838",
         "summary": {
           "kills": 34,
           "wave": 2,
@@ -384,59 +377,6 @@
       },
       "kills": 34,
       "wave": 2
-    },
-    {
-      "version": 1,
-      "seed": "g8-boss-future",
-      "duration": 16,
-      "fixedStep": 0.016666666666666666,
-      "final": {
-        "version": 5,
-        "frame": 960,
-        "time": 16.000000000000373,
-        "rngState": 3880419604,
-        "registries": {
-          "enemies": [
-            "grunt",
-            "swift",
-            "tank"
-          ],
-          "powerups": [
-            "shield",
-            "overdrive"
-          ],
-          "upgrades": [
-            "damage+",
-            "firerate+",
-            "spread+"
-          ],
-          "waveMods": [
-            "storm",
-            "gravity"
-          ],
-          "bossPatterns": [
-            "laser-cross",
-            "safe-lane-volley",
-            "multi-beam-intersect",
-            "future-converge"
-          ]
-        },
-        "registryHash": "2370592d",
-        "summary": {
-          "kills": 43,
-          "wave": 3,
-          "grazeCount": 15,
-          "overdriveMeter": 0,
-          "overdriveActive": true,
-          "bossActive": false,
-          "bossPattern": "future-converge",
-          "bossStartedFrame": 0,
-          "bossEndedFrame": 906,
-          "parallaxLayers": []
-        }
-      },
-      "kills": 43,
-      "wave": 3
     }
   ]
 }

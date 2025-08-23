@@ -115,7 +115,7 @@ export function replayRun(rec: RunRecording): ReplayResult {
   if (snap.registryHash !== recFinalUpgraded.registryHash) diffs.push('registryHash mismatch');
   if (snap.summary.kills !== rec.kills) diffs.push(`kills mismatch ${snap.summary.kills} != ${rec.kills}`);
   if (snap.summary.wave !== rec.wave) diffs.push(`wave mismatch ${snap.summary.wave} != ${rec.wave}`);
-  if (process.env.GOLDEN_REQUIRE_V4) {
+  if (process.env.GOLDEN_REQUIRE_EXTENDED) {
     // When enforcing v4 metrics ensure graze/overdrive match (expected to be zero in current golden set)
     if ((snap.summary.grazeCount ?? 0) !== (recFinalUpgraded.summary.grazeCount ?? 0)) diffs.push('grazeCount mismatch');
     if ((snap.summary.overdriveMeter ?? 0) !== (recFinalUpgraded.summary.overdriveMeter ?? 0)) diffs.push('overdriveMeter mismatch');
