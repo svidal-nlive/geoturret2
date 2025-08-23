@@ -1,0 +1,20 @@
+{
+  // Disable strict line length globally (docs are spec-like)
+  "MD013": false,
+  // Allow inline HTML if needed
+  "MD033": false,
+  // Allow consecutive blank lines for visual section spacing
+  "MD012": false,
+  // Allow fenced code blocks without surrounding blank lines (wireframe blocks)
+  "MD031": false,
+  // Disable ordered list renumber enforcement (we intentionally restart lists)
+  "MD029": false,
+  // Disable list surrounding blank line requirement
+  "MD032": false,
+  // Allow inconsistent ordered list numbering style
+  "MD030": false,
+  // Allow long tables/paragraphs, already covered by MD013 disabled
+  // Relax unordered list indentation / hard tabs for roadmap legacy sections
+  "MD007": false,
+  "MD010": false
+}

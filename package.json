@@ -18,7 +18,7 @@
     "golden:record": "node scripts/golden-record.mjs",
   "golden:diff": "node scripts/golden-diff.mjs --actual golden/runRecordings.actual.json --golden golden/runRecordings.json",
     "lint:ts": "eslint . --ext .ts,.tsx --max-warnings=0",
-    "lint:md": "markdownlint '**/*.md' --ignore node_modules",
+  "lint:md": "markdownlint -c .markdownlint.jsonc '**/*.md' --ignore node_modules",
     "lint": "npm run lint:ts && npm run lint:md",
     "build": "vite build",
     "size:build": "esbuild src/main.ts --bundle --minify --sourcemap --format=esm --outfile=dist/size-check.js",

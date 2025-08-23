@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 # Geoturret 2 – UI Wireframes & Interaction Notes
 
 Purpose: Lightweight ASCII wireframes to align on spatial layout and interaction affordances before implementation. Update if major structural changes are proposed.
