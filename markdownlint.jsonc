@@ -1,0 +1,6 @@
+{
+  // Allow long lines in tables / code fences
+  "MD013": false,
+  // Permit inline HTML if later needed for wireframe annotations
+  "MD033": false
+}

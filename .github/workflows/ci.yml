@@ -1,0 +1,84 @@
+name: CI
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Lint (TS + Markdown)
+        run: npm run lint
+      - name: Type Check
+        run: npm run typecheck
+      - name: Unit & Coverage Tests
+        run: npm run coverage
+      - name: Upload Coverage Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage
+      - name: Long Simulation Determinism (waves)
+        run: npm run test:sim:verify
+      - name: Long Simulation Baseline Hash
+        run: npm run test:sim:baseline
+      - name: Build
+        run: npm run build
+      - name: Bundle Size Check
+        run: npm run size:check || du -sh dist || true
+      - name: Vulnerability Scan (non-blocking)
+        run: npm audit --omit=dev || true
+
+  perf-check:
+    needs: build-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Performance Threshold Enforcement
+        env:
+          PERF_MARGIN: 1.1 # slight slack to reduce flake; tighten later
+        run: |
+          if [ -f perf-baseline.json ]; then \
+            echo "Running perf-check against committed baseline"; \
+            node --expose-gc scripts/perf-check.mjs --frames 1200 --seeds a,b,c,d; \
+          else \
+            echo "No perf-baseline.json found; skipping perf-check (create baseline and commit to enable)"; \
+          fi
+
+  golden-replay:
+    needs: build-test
+    runs-on: ubuntu-latest
+    env:
+      GOLDEN_REQUIRE_V4: 1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Generate Actual Golden Snapshot
+        run: npm run golden:record -- --cases g1:6,g2:10,g3-parallax:6,g4-grazeOD:8 --out golden/runRecordings.actual.json
+      - name: Golden Diff (concise drift summary)
+        run: npm run golden:diff
+      - name: Verify Golden Recordings
+        run: npm run test:golden
+      - name: Upload Golden Actual Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-actual
+          path: golden/runRecordings.actual.json

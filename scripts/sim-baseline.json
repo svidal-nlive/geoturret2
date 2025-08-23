@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "seed": "ci-seed",
+  "targetWave": 15,
+  "accelPerFrame": 5,
+  "maxSeconds": 30,
+  "hash": "0cfd10d2",
+  "frame": 179,
+  "kills": 895,
+  "rngState": 3864999029
+}

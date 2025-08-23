@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "recordings": [
+    {
+      "version": 1,
+      "seed": "g1",
+      "duration": 6,
+      "fixedStep": 0.016666666666666666,
+      "final": {
+        "version": 2,
+        "frame": 360,
+        "time": 5.999999999999984,
+        "rngState": 193872715,
+        "registries": {
+          "enemies": [
+            "grunt",
+            "swift",
+            "tank"
+          ],
+          "powerups": [
+            "shield",
+            "overdrive"
+          ],
+          "upgrades": [
+            "damage+",
+            "firerate+",
+            "spread+"
+          ],
+          "waveMods": [
+            "storm",
+            "gravity"
+          ],
+          "bossPatterns": [
+            "laser-cross",
+            "safe-lane-volley",
+            "multi-beam-intersect"
+          ]
+        },
+        "registryHash": "a707d838",
+        "summary": {
+          "kills": 4,
+          "wave": 0
+        }
+      },
+      "kills": 4,
+      "wave": 0
+    },
+    {
+      "version": 1,
+      "seed": "g2",
+      "duration": 10,
+      "fixedStep": 0.016666666666666666,
+      "final": {
+        "version": 2,
+        "frame": 600,
+        "time": 10.000000000000076,
+        "rngState": 2411272253,
+        "registries": {
+          "enemies": [
+            "grunt",
+            "swift",
+            "tank"
+          ],
+          "powerups": [
+            "shield",
+            "overdrive"
+          ],
+          "upgrades": [
+            "damage+",
+            "firerate+",
+            "spread+"
+          ],
+          "waveMods": [
+            "storm",
+            "gravity"
+          ],
+          "bossPatterns": [
+            "laser-cross",
+            "safe-lane-volley",
+            "multi-beam-intersect"
+          ]
+        },
+        "registryHash": "a707d838",
+        "summary": {
+          "kills": 10,
+          "wave": 1
+        }
+      },
+      "kills": 10,
+      "wave": 1
+    }
+  ]
+}

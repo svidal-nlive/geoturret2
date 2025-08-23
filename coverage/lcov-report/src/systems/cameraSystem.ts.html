@@ -1,0 +1,337 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for src/systems/cameraSystem.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/systems</a> cameraSystem.ts</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">90.47% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>76/84</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">85% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>17/20</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">50% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>2/4</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">90.47% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>76/84</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line high'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">40x</span>
+<span class="cline-any cline-yes">40x</span>
+<span class="cline-any cline-yes">40x</span>
+<span class="cline-any cline-yes">40x</span>
+<span class="cline-any cline-yes">40x</span>
+<span class="cline-any cline-yes">40x</span>
+<span class="cline-any cline-yes">40x</span>
+<span class="cline-any cline-yes">40x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">200x</span>
+<span class="cline-any cline-yes">200x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">120x</span>
+<span class="cline-any cline-yes">120x</span>
+<span class="cline-any cline-yes">120x</span>
+<span class="cline-any cline-yes">120x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">31x</span>
+<span class="cline-any cline-yes">31x</span>
+<span class="cline-any cline-yes">31x</span>
+<span class="cline-any cline-yes">31x</span>
+<span class="cline-any cline-yes">31x</span>
+<span class="cline-any cline-yes">31x</span>
+<span class="cline-any cline-yes">31x</span>
+<span class="cline-any cline-yes">31x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">526x</span>
+<span class="cline-any cline-yes">526x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">557x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { System, OrchestratorContext, eventBus } from '../engine';
+import { GameState } from '../state/gameState';
+import { player } from './playerSystem';
+&nbsp;
+/** Simple smooth camera following the player with configurable lag. */
+export function createCameraSystem(state: GameState, opts?: { stiffness?: number; worldRadius?: number; bounds?: { minX: number; maxX: number; minY: number; maxY: number }; deadzone?: number; zoomStiffness?: number; leadTime?: number; maxLead?: number }): System {
+  const stiffness = opts?.<span class="branch-0 cbranch-no" title="branch not covered" >stiffness ?? 10; // follow smoothing</span>
+  const deadzone = opts?.deadzone ?? 8;
+  const zoomStiff = opts?.zoomStiffness ?? 6;
+  const leadTime = opts?.leadTime ?? 0; // seconds to look ahead along velocity
+  const maxLead = opts?.maxLead ?? 160; // clamp distance of lead
+  // Backwards compat: worldRadius if rectangular bounds not provided
+  const worldRadius = opts?.worldRadius ?? 0;
+  const rect = opts?.bounds;
+  // Expose simple shake API
+  if (typeof window !== 'undefined') <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
+<span class="cstat-no" title="statement not covered" >    (window as any).cameraShake = <span class="fstat-no" title="function not covered" >function(duration = 0.4, amp = 24, freq = 28) {</span></span>
+<span class="cstat-no" title="statement not covered" >      state.camera.shakeDuration = duration;</span>
+<span class="cstat-no" title="statement not covered" >      state.camera.shakeRemaining = duration;</span>
+<span class="cstat-no" title="statement not covered" >      state.camera.shakeAmp = amp;</span>
+<span class="cstat-no" title="statement not covered" >      state.camera.shakeFreq = freq;</span>
+<span class="cstat-no" title="statement not covered" >    };</span>
+<span class="cstat-no" title="statement not covered" >    (window as any).cameraZoomTo = <span class="fstat-no" title="function not covered" >function(z = 1) { state.camera.targetZoom = Math.max(0.2, Math.min(3, z)); };</span></span>
+<span class="cstat-no" title="statement not covered" >  }</span>
+  // Track previous player position for velocity estimation
+  let prevPx = player.x;
+  let prevPy = player.y;
+  return {
+    id: 'camera', order: -150, // after input (-200) but before player (-100) not required, just early
+    update: (dt: number, _ctx: OrchestratorContext) =&gt; {
+      const cx = state.camera.x;
+      const cy = state.camera.y;
+      // target player pos
+      let tx = player.x;
+      let ty = player.y;
+      // Velocity-based lead (estimate velocity from previous frame)
+      if (leadTime &gt; 0 &amp;&amp; dt &gt; 0) {
+        const vx = (player.x - prevPx) / dt;
+        const vy = (player.y - prevPy) / dt;
+        let lx = vx * leadTime;
+        let ly = vy * leadTime;
+        const mag = Math.hypot(lx, ly);
+        if (mag &gt; maxLead) { const s = maxLead / (<span class="branch-0 cbranch-no" title="branch not covered" >mag || 1); l</span>x *= s; ly *= s; }
+        tx += lx; ty += ly;
+      }
+      // Deadzone: if player within deadzone rect around camera, don't adjust target (reduces micro jitter)
+      if (Math.abs(tx - cx) &lt; deadzone) tx = cx;
+      if (Math.abs(ty - cy) &lt; deadzone) ty = cy;
+      // exponential smoothing toward player
+      const lerp = 1 - Math.exp(-stiffness * dt);
+      let nx = cx + (tx - cx) * lerp;
+      let ny = cy + (ty - cy) * lerp;
+      // Clamp to bounds
+      if (rect) {
+        nx = Math.max(rect.minX, Math.min(rect.maxX, nx));
+        ny = Math.max(rect.minY, Math.min(rect.maxY, ny));
+      } else if (worldRadius &gt; 0) {
+        const dist2 = nx*nx + ny*ny;
+        const r = worldRadius;
+        if (dist2 &gt; r*r) { const d = Math.sqrt(dist2); nx = nx / d * r; ny = ny / d * r; }
+      }
+      state.camera.x = nx;
+      state.camera.y = ny;
+      // Zoom smoothing toward targetZoom
+      const zoomLerp = 1 - Math.exp(-zoomStiff * dt);
+      state.camera.zoom += (state.camera.targetZoom - state.camera.zoom) * zoomLerp;
+      // Shake update
+      if (state.camera.shakeRemaining &gt; 0) {
+        state.camera.shakeRemaining -= dt;
+        const t = state.camera.shakeDuration - state.camera.shakeRemaining;
+        const progress = Math.max(0, state.camera.shakeRemaining) / state.camera.shakeDuration;
+        const damp = progress; // linear falloff
+        const f = state.camera.shakeFreq;
+        // Use simple sin noise based on time &amp; remaining
+        state.camera.shakeX = (Math.sin(t * f * 13.37) * 0.5 + Math.sin(t * f * 7.11) * 0.5) * state.camera.shakeAmp * damp;
+        state.camera.shakeY = (Math.cos(t * f * 11.17) * 0.5 + Math.sin(t * f * 5.27) * 0.5) * state.camera.shakeAmp * damp;
+      } else {
+        state.camera.shakeX = 0; state.camera.shakeY = 0;
+      }
+  prevPx = player.x;
+  prevPy = player.y;
+    }
+  };
+}
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2025-08-22T23:41:48.663Z
+            </div>
+        <script src="../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../sorter.js"></script>
+        <script src="../../block-navigation.js"></script>
+    </body>
+</html>
+    

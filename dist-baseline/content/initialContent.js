@@ -1,0 +1,14 @@
+import { Registries } from './registries.js';
+Registries.enemy({ id: 'grunt', hp: 10, speed: 1.0 });
+Registries.enemy({ id: 'swift', hp: 6, speed: 1.6 });
+Registries.enemy({ id: 'tank', hp: 30, speed: 0.6 });
+Registries.powerup({ id: 'shield', duration: 5 });
+Registries.powerup({ id: 'overdrive', duration: 8 });
+Registries.upgrade({ id: 'damage+', tier: 1 });
+Registries.upgrade({ id: 'firerate+', tier: 1 });
+Registries.upgrade({ id: 'spread+', tier: 1 });
+Registries.waveMod({ id: 'storm', description: 'Increased projectile density' });
+Registries.waveMod({ id: 'gravity', description: 'Projectiles arc downward' });
+Registries.bossPattern({ id: 'laser-cross', version: 1 });
+Registries.bossPattern({ id: 'safe-lane-volley', version: 1 });
+Registries.bossPattern({ id: 'multi-beam-intersect', version: 1 });

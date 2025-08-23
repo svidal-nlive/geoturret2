@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "dist-baseline",
+    "declaration": false,
+    "sourceMap": false,
+    "removeComments": true
+  },
+  "include": ["src/testUtils/poolHarness.ts", "src/engine/**/*.ts", "src/state/**/*.ts", "src/systems/**/*.ts", "src/content/**/*.ts", "src/devtools/replay.ts"],
+  "exclude": ["node_modules", "dist", "dist-baseline", "**/*.test.ts"]
+}
