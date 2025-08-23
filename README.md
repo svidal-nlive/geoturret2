@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/svidal-nlive/geoturret2/actions/workflows/ci.yml/badge.svg)](https://github.com/svidal-nlive/geoturret2/actions/workflows/ci.yml)
 [![Coverage](./coverage-badge.svg)](#coverage-badge-generation)
+![Size](./size-badge.svg)
 
 
 Pre-implementation scaffold aligned with `PRD.md` & `ROADMAP.md`.
