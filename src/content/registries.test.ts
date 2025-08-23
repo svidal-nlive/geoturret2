@@ -13,6 +13,6 @@ describe('Registries placeholder content', () => {
   });
   it('contains expected boss patterns', () => {
     const snap = Registries.snapshot();
-    expect(snap.bossPatterns.sort()).toEqual(['laser-cross','multi-beam-intersect','safe-lane-volley']);
+    expect(snap.bossPatterns.sort()).toEqual(['future-converge','laser-cross','multi-beam-intersect','safe-lane-volley']);
   });
 });
