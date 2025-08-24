@@ -42,10 +42,29 @@ for (const l of lines) {
   }
 }
 
-// 4. Print categorized summary
-console.log('\n[golden-monitor] DRIFT_DETECTED Categorized metric deltas:');
-for (const m of Object.keys(perMetric).sort()) {
-  console.log(`- ${m}: ${perMetric[m].join('; ')}`);
+// 4. Classify metrics by severity tiers
+const SEVERITY = {
+  STRUCTURAL: new Set(['seed','duration','f','t','r','h','vm']), // core determinism invariants
+  BALANCE: new Set(['k','kills','w','g','om','oa']), // gameplay pacing / progression values
+  COSMETIC: new Set(['p','parallax.len']) // visual metadata
+};
+function classify(metric) {
+  if (SEVERITY.STRUCTURAL.has(metric)) return 'STRUCTURAL';
+  if (SEVERITY.BALANCE.has(metric)) return 'BALANCE';
+  return 'COSMETIC';
+}
+const buckets = { STRUCTURAL: [], BALANCE: [], COSMETIC: [] };
+for (const m of Object.keys(perMetric)) {
+  const sev = classify(m);
+  buckets[sev].push({ metric: m, values: perMetric[m] });
+}
+console.log('\n[golden-monitor] DRIFT_DETECTED Severity breakdown:');
+for (const sev of ['STRUCTURAL','BALANCE','COSMETIC']) {
+  if (!buckets[sev].length) continue;
+  console.log(`  ${sev}: ${buckets[sev].length} metric(s)`);
+  for (const entry of buckets[sev].sort((a,b)=>a.metric.localeCompare(b.metric))) {
+    console.log(`   - ${entry.metric}: ${entry.values.join('; ')}`);
+  }
 }
 
 // 5. Write markdown artifact

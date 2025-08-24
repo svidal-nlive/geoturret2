@@ -21,6 +21,8 @@
     "golden:diff": "node scripts/golden-diff.mjs --actual golden/runRecordings.actual.json --golden golden/runRecordings.json",
     "golden:monitor": "node scripts/golden-monitor.mjs",
     "golden:rotate": "node scripts/golden-rotate.mjs",
+  "snapshot:diff": "node scripts/snapshot-diff.mjs",
+  "versionmap:summary": "node scripts/versionmap-summary.mjs",
     "archives:prune": "node scripts/prune-archives.mjs",
     "registry:hash": "node -e \"import('./dist-baseline/content/registries.js').then(m=>console.log(m.Registries.hash()))\"",
     "golden:versionmap:diff": "node scripts/versionmap-diff.mjs --base golden/runRecordings.json --compare golden/runRecordings.actual.json",

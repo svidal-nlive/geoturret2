@@ -103,17 +103,18 @@ Overlay fields: seed, frame, time, kills, wave, pool usage (enemy & bullet inUse
 
 Determinism quick check: reload with same seed and compare logged snapshot `rngState` after ~1s.
 
-### Run Snapshot (v5)
+### Run Snapshot (v7)
 
-`GameOrchestrator.snapshot()` (schema v6) fields:
+`GameOrchestrator.snapshot()` (schema v7) fields:
 
-- `version`: 6
+- `version`: 7
 - `frame`: number
 - `time`: simulated seconds
 - `rngState`: internal RNG numeric state
 - `registries`: current registry listings (ids + metadata)
 - `registryHash`: djb2 hex digest of sorted registry ids (integrity & drift detection)
-- `summary`: `{ kills, wave, grazeCount, overdriveMeter, overdriveActive, parallaxLayers?, bossActive, bossPattern, bossStartedFrame, bossEndedFrame }` (older v1–v5 snapshots are auto-upgraded; new mandatory boss fields default to inactive/null lifecycle).
+
+- `summary`: `{ kills, wave, grazeCount, overdriveMeter, overdriveActive, parallaxLayers?, bossActive, bossPattern, bossStartedFrame, bossEndedFrame, bossPatternState? }` (older snapshots auto-upgraded). `bossPatternState` (added v7) stores serialized internal script runner state to allow mid-pattern resume determinism; it is omitted unless a boss is active.
 	- `versionMap`: map of `kind:id` → content version for each registry entry (added v6 for future persistence migrations / drift analytics)
 	- Boss patterns always populate lifecycle fields; `future-converge` & others drive spawn deltas validated by `bossPattern.spawnCounts.test.ts`.
 - `parallaxLayers`: persisted parallax layer descriptors (for golden replay parity)
@@ -199,7 +200,7 @@ Robust spike handling:
 - Always keep baseline & check invocations aligned (either both robust or both plain) to avoid artificial failures.
 - Use small N (start with 1). If you need >2 consistently, investigate root cause before increasing.
 
-### Replay Harness & Golden Recordings (v5 Metrics & Boss Enforcement)
+### Replay Harness & Golden Recordings (Extended Metrics & Boss Enforcement)
 
 Deterministic verification utility (`src/devtools/replay.ts`):
 
@@ -212,7 +213,7 @@ console.log(result.ok, result.differences);
 
 Recorded payload (`RunRecording`) stores seed, duration, fixedStep, final snapshot and summary stats (kills, wave). Replay recomputes and flags any drift across core invariants (frame, time, rngState, registryHash, kills, wave). This underpins future regression detection (e.g., store golden recordings per commit).
 
-Golden recordings (`golden/runRecordings.json`) are verified in CI to catch deterministic drift. As of schema v5, graze & overdrive metrics plus boss lifecycle fields are enforced in golden verification. A dedicated golden case `g4-grazeOD` (legacy seed name retained) exercises non-zero graze accumulation and overdrive activation. Boss pattern cases (`g5-boss`, `g6-boss-safe`, `g7-boss-multi`) lock lifecycle timing & spawn pacing.
+Golden recordings (`golden/runRecordings.json`) are verified in CI to catch deterministic drift. Extended metrics include graze & overdrive accumulation, boss lifecycle fields, parallax layer metadata, and (schema v7) pattern persistence state where applicable. A dedicated golden case `g4-grazeOD` exercises non-zero graze & overdrive. Boss pattern cases (`g5-boss`, `g6-boss-safe`, `g7-boss-multi`, etc.) lock lifecycle timing & spawn pacing.
 
 Regenerate intentionally after approved gameplay / balance changes:
 
@@ -259,6 +260,16 @@ If you only want to trial a candidate without committing, use the golden record 
 npm run golden:record -- --cases g1:6,g2:10,g3-parallax:6,g4-grazeOD:8,g5-bossIntro:12 --out golden/runRecordings.actual.json
 ```
 Compare `golden/runRecordings.actual.json` to the committed `runRecordings.json` before deciding to update.
+
+#### Golden Monitor Severity
+
+`npm run golden:monitor` regenerates actuals under `GOLDEN_MODE=1` and classifies drift:
+
+- STRUCTURAL: frame/time/rngState/registry hash/version map/seed ordering (must never drift without intentional rotation + rationale).
+- BALANCE: kills, wave, grazeCount, overdriveMeter, overdriveActive (acceptable only when balance tuning and followed by rotation).
+- COSMETIC: parallax metadata or other presentational fields (lowest risk; still require review for unintended side effects).
+
+This severity breakdown prints before commit (pre-commit hook) to prioritize review.
 
 #### Quick Golden Diff (No Regeneration)
 
