@@ -415,6 +415,25 @@ On pushes to `main`, a dedicated workflow regenerates the badge; if it changes i
 
 Alternative approaches (e.g. authoring source imports with explicit `.js` or using a bundler) were avoided to keep in-repo source ergonomics and avoid extra build tooling for the minimal deterministic harness.
 
+### Bundle Size Regression Guard
+
+`npm run size:regression` builds a minimal production bundle (`dist/size-check.js`) via esbuild and measures its gzip size. A baseline (`size-baseline.json`) is created on first run and updated automatically when size decreases (or when an increase is explicitly accepted).
+
+Failure criteria (non-override):
+
+- Absolute growth > 5KB OR
+- Relative growth > 5%
+
+Override & accept a deliberate increase:
+
+```bash
+SIZE_ALLOW_REGRESSION=1 npm run size:regression
+git add size-baseline.json
+git commit -m "chore(size): accept increase rationale"
+```
+
+Rationale: Prevent unnoticed asset creep in core deterministic harness. Thresholds are intentionally forgiving early; tighten later as content stabilizes.
+
 ### Snapshot Upgrade Negative Tests
 
 `serialization.upgrade.negative.test.ts` adds defensive coverage for malformed / legacy snapshots:
