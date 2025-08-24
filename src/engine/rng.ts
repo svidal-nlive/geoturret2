@@ -5,6 +5,9 @@
  */
 export class RNG {
   private state: number;
+  private _draws = 0;
+  static enableCounting = !!process.env.RNG_DRAW_COUNT_MODE;
+  get draws() { return this._draws; }
   constructor(seed: number | string) {
     if (typeof seed === 'string') {
       // simple string hash (djb2)
@@ -22,6 +25,7 @@ export class RNG {
   next(): number {
     // LCG (Numerical Recipes): x = (1664525*x + 1013904223) mod 2^32
     this.state = (1664525 * this.state + 1013904223) >>> 0;
+  if (RNG.enableCounting) this._draws++;
     return this.state / 0x100000000; // 2^32
   }
   /** Int in [min, max] inclusive */
