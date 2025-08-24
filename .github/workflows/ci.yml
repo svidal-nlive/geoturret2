@@ -22,6 +22,14 @@ jobs:
         run: npm run typecheck
       - name: Unit & Coverage Tests
         run: npm run coverage
+      - name: Registry Summary Freshness (pre-build)
+        run: |
+          # Generate fresh summary (fallback to src) and compare with committed to detect missing regen
+          cp artifacts/registry-summary.md artifacts/registry-summary.md.prev 2>/dev/null || true
+          node scripts/registry-summary.mjs
+          if [ -f artifacts/registry-summary.md.prev ]; then diff -q artifacts/registry-summary.md.prev artifacts/registry-summary.md || { echo 'Registry summary changed. Commit updated artifacts/registry-summary.md.'; exit 1; }; fi
+      - name: VersionMap Print (diagnostic)
+        run: npm run registry:versionmap
       - name: Upload Coverage Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -35,6 +43,8 @@ jobs:
         run: npm run build
       - name: Bundle Size Check
         run: npm run size:check || du -sh dist || true
+      - name: Bundle Size Regression Guard
+        run: npm run size:regression
       - name: Vulnerability Scan (non-blocking)
         run: npm audit --omit=dev || true
 
@@ -75,6 +85,22 @@ jobs:
         run: npm run golden:record -- --cases g1:6,g2:10,g3-parallax:6,g4-grazeOD:8,g5-boss:14,g6-boss-safe:22,g7-boss-multi:26,g8-boss-future:16 --out golden/runRecordings.actual.json
       - name: Golden Diff (concise drift summary)
         run: npm run golden:diff
+        - name: Golden monitor (informational)
+          run: npm run golden:monitor || true
+      - name: Upload Golden Diff Summary Artifact (if present)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-diff-summary
+          path: artifacts/golden-diff-summary.md
+      - name: VersionMap Diff (balance/version drift)
+        run: npm run golden:versionmap:diff
+      - name: Upload VersionMap Diff Artifact (if present)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: versionmap-diff
+          path: artifacts/versionmap-diff.json
       - name: Verify Golden Recordings
         run: npm run test:golden
       - name: Upload Golden Actual Artifact
@@ -82,3 +108,53 @@ jobs:
         with:
           name: golden-actual
           path: golden/runRecordings.actual.json
+
+  pr-summary:
+    if: github.event_name == 'pull_request'
+    needs: [build-test, golden-replay]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts-all
+      - name: Collate Artifacts (move to expected paths)
+        run: |
+          mkdir -p artifacts
+          if [ -f artifacts-all/golden-diff-summary/golden-diff-summary.md ]; then cp artifacts-all/golden-diff-summary/golden-diff-summary.md artifacts/golden-diff-summary.md; fi
+          if [ -f artifacts-all/versionmap-diff/versionmap-diff.json ]; then cp artifacts-all/versionmap-diff/versionmap-diff.json artifacts/versionmap-diff.json; fi
+          if [ -f artifacts-all/coverage-report/coverage/coverage-summary.json ]; then cp artifacts-all/coverage-report/coverage/coverage-summary.json coverage-summary.json.tmp && mkdir -p coverage && cp artifacts-all/coverage-report/coverage/coverage-summary.json coverage/coverage-summary.json; fi
+      - name: Generate PR Comment Summary
+        run: npm run pr:comment:summary
+      - name: Upload PR Comment Summary Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-comment-summary
+          path: artifacts/pr-comment-summary.md
+      - name: Post / Update PR Comment Summary
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const marker = '<!-- pr-comment-summary -->';
+            const summaryPath = 'artifacts/pr-comment-summary.md';
+            if (!fs.existsSync(summaryPath)) { core.warning('No summary file found'); return; }
+            const bodyContent = fs.readFileSync(summaryPath,'utf8');
+            const fullBody = `${marker}\n${bodyContent}`;
+            const {owner, repo} = context.repo;
+            const prNumber = context.payload.pull_request.number;
+            const { data: comments } = await github.rest.issues.listComments({ owner, repo, issue_number: prNumber, per_page: 100 });
+            const existing = comments.find(c => c.body && c.body.includes(marker));
+            if (existing) {
+              core.info('Updating existing PR summary comment');
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body: fullBody });
+            } else {
+              core.info('Creating new PR summary comment');
+              await github.rest.issues.createComment({ owner, repo, issue_number: prNumber, body: fullBody });
+            }
