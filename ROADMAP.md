@@ -91,7 +91,7 @@ Testing:
 - ⏳ Boss pattern screenshot capture (telegraph frame)
 - ⏳ Failure artifact export (images + JSON seed) for repro
 - ⏳ Client telemetry schema (waveReached, bossPatternFail, runEnd) local export only
-- ⏳ Bundle size budget enforcement (<=120KB gz core)
+	- 🧩 Bundle size budget enforcement (<=120KB gz core) (size regression guard active; minimal core baseline 7.34KB via `size-entry` + diagnostics; next: modularize optional systems to push core <6KB & set stricter gate)
 - ⏳ Automated accessibility scan (axe-core) in Playwright
 - ⏳ Telegraph snapshot & safety coverage assertion harness
 
@@ -200,6 +200,7 @@ Update Notes:
 - 2025-08-24: Boss pattern scripting engine finalized (fork/join aggregation, executedLabelCounts + rngDraws parity instrumentation, nested fork parity & metrics schema guard tests). Snapshot schema advanced to v7 adding `bossPatternState` for mid-pattern resume determinism. ROADMAP & checklist updated (P1-6 complete). Added SCRIPT_ENGINE.md and README link.
 
 - 2025-08-25: Bundle size baseline raised to 7.34KB (core minimal entry) after adding size diagnostics & `src/size-entry.ts`. Tracking TODO (Phase 2 tooling): modularize optional subsystems (audio manager, boss system, extended HUD, contrast audit, large theme palettes) behind dynamic imports to target <6KB gzip core with lazy load for non-critical UX. Evaluate splitting `renderSystem` heavy HUD/theme code and deferring palette audit to user interaction. Add follow-up size budget tightening once modularization complete.
+\n+- 2025-08-25: Accepted boss simulation deterministic baseline refresh (fairness/pattern adjustments increased frame counts & kill metrics). Updated `boss-sim-baseline.json`; reinforced multi-run guard. Strategy: treat future deterministic drift as intentional only when tied to fairness accessibility improvements (document & rotate baseline) vs unintended regressions (investigate).\n*** End Patch
 
 - 2025-08-22: Marked module extraction, event bus, profiler, RNG shim, camera enhancements, parallax system, and snapshot v3 as complete; partial status for RNG full injection & serialization restore path. Added golden replay validation note.
 	- Added error boundary ring buffer implementation & tests.

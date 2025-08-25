@@ -63,18 +63,18 @@ Add date-stamped notes under the related phase section when status changes. Exam
 | P2-14 | Enhanced color palettes (contrast + colorblind + dark) | [~] | 2025-08-25 highContrastDark + audit API (paletteAudit / auto mode) added; remaining: live contrast overlay opt-in |
 | P2-15 | Safe lane highlight intensity slider | [x] | 2025-08-25 slider + persistence + API |
 | P2-15a | HUD redesign (health/armor, coins, upgrades, timers) | [~] | 2025-08-25 core bars, meter, coin delta placeholder, damage flash, death overlay; pending icons/timers |
-| P2-15b | Coin gain feedback polish | [x] | 2025-08-25 fade smoothing, bursts (motion aware), SR debounce, gain/spend styling |
+| P2-15b | Coin gain feedback polish | [x] | 2025-08-25 fade smoothing, bursts (motion aware), SR debounce, gain/spend styling (complete) |
 | P2-15c | Upgrade summary panel | [ ] | |
 | P2-16 | Hold-to-reroll interaction | [ ] | |
 | P2-17 | Rarity / discount badges + tooltips | [ ] | |
 | P2-18 | Reroll cost scaling feedback | [ ] | |
 | P2-19 | Playwright smoke tests | [x] | 2025-08-25 baseline smoke + accessibility strict gate merged |
-| P2-20 | Boss pattern screenshot capture | [>] | 2025-08-25 CI job added (commit 0d0ab6b) generating pattern PNG artifacts; awaiting first successful remote run before marking complete |
+| P2-20 | Boss pattern screenshot capture | [x] | 2025-08-25 CI job artifacts verified on Actions (pattern set stable) |
 | P2-21 | Failure artifact export (images + seed JSON) | [ ] | |
 | P2-22 | Shop categorization & layout reorg | [ ] | |
 | P2-23 | Settings menu grouping | [ ] | |
 | P2-24 | Client telemetry schema (local export) | [ ] | |
-| P2-25 | Bundle size budget enforcement | [ ] | |
+| P2-25 | Bundle size budget enforcement | [~] | 2025-08-25 size regression guard + minimal entry baseline (7.34KB); pending modularization + stricter gate <6KB |
 | P2-26 | Automated accessibility scan (axe-core) | [x] | 2025-08-25 strict axe (0 violations) enforced in smoke.spec |
 | P2-27 | Telegraph safety coverage harness | [ ] | |
 | P2-XC | Exit criteria met (patterns, accessibility, smoke green) | [ ] | Gate |
@@ -93,7 +93,7 @@ Fine-grained items to visualize breadth & allow partial landing without inflatin
 | P2-CR6 | Upgrade: Graze Multiplier Tiering | [ ] | Scales overdrive charge efficacy |
 | P2-CR7 | Upgrade: Overdrive Extender (duration + decay curve) | [ ] | Needs new scalar in snapshot schema v7? |
 | P2-CR8 | Upgrade: Projectile Pierce (limited passes) | [ ] | Pool accounting for pierce decrement |
-| P2-CR9 | Boss Pattern: Spiral Barrage (seed-stable) | [~] | 2025-08-23 core spawn loop landed; polish pending |
+| P2-CR9 | Boss Pattern: Spiral Barrage (seed-stable) | [~] | 2025-08-23 core spawn loop; 2025-08-25 baseline metrics rotated with fairness changes; polish pending |
 | P2-CR10 | Boss Pattern: Rotating Safe Donut (gap orbit) | [ ] | Collision mask choreography |
 | P2-CR11 | Wave Mod: Pulsing Hazard Field | [ ] | Telemetry hook for exposure time |
 | P2-CR12 | Wave Mod: Moving Safe Lane (laterally shifting) | [ ] | Requires camera-follow decoupling review |
@@ -156,6 +156,8 @@ Fine-grained items to visualize breadth & allow partial landing without inflatin
 ## Update Log
 
 (Add newest entries at top)
+
+- 2025-08-25: Marked P2-20 complete (first CI artifact verification). P2-25 moved to partial after establishing 7.34KB minimal core baseline. Boss sim baseline rotated post fairness adjustments (see roadmap note). Added clarification on spiral barrage follow-up polish.
 
 - 2025-08-25: Added boss pattern screenshot CI job (P2-20) capturing deterministic patterns (laser-cross, safe-lane-volley, multi-beam-intersect, future-converge, spiral-barrage, pre-laser-arc-preview, laser-arc-sweep); artifacts uploaded as pattern-screenshots. Will mark complete after verifying first GitHub Actions run artifacts.
 
