@@ -8,7 +8,7 @@ import { createInputSystem } from './systems/inputSystem';
 import { createEnemySystem } from './systems/enemySystem';
 import { createBulletSystem } from './systems/bulletSystem';
 import { createCollisionSystem } from './systems/collisionSystem';
-import { createRenderSystem } from './systems/renderSystem';
+import { createCoreRenderSystem } from './systems/renderSystem.core';
 
 const state = createGameState();
 const orchestrator = new GameOrchestrator({ seed: 'size-seed', fixedStep: 1/60, summarySource: () => ({ kills: state.kills, wave: state.wave, grazeCount: state.grazeCount, overdriveMeter: state.overdriveMeter, overdriveActive: state.overdriveActive }) });
@@ -18,7 +18,7 @@ orchestrator.register(createPlayerSystem(state));
 orchestrator.register(createEnemySystem(state));
 orchestrator.register(createBulletSystem(state));
 orchestrator.register(createCollisionSystem(state));
-orchestrator.register(createRenderSystem(state));
+orchestrator.register(createCoreRenderSystem(state));
 // Initialize and perform a couple of fixed steps to ensure tree-shaking can't drop code paths.
 orchestrator.init();
 for (let i=0;i<3;i++) orchestrator.advance(1/60);
