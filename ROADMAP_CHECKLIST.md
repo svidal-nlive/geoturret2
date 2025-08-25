@@ -69,7 +69,7 @@ Add date-stamped notes under the related phase section when status changes. Exam
 | P2-17 | Rarity / discount badges + tooltips | [ ] | |
 | P2-18 | Reroll cost scaling feedback | [ ] | |
 | P2-19 | Playwright smoke tests | [x] | 2025-08-25 baseline smoke + accessibility strict gate merged |
-| P2-20 | Boss pattern screenshot capture | [ ] | |
+| P2-20 | Boss pattern screenshot capture | [>] | 2025-08-25 CI job added (commit 0d0ab6b) generating pattern PNG artifacts; awaiting first successful remote run before marking complete |
 | P2-21 | Failure artifact export (images + seed JSON) | [ ] | |
 | P2-22 | Shop categorization & layout reorg | [ ] | |
 | P2-23 | Settings menu grouping | [ ] | |
@@ -156,6 +156,8 @@ Fine-grained items to visualize breadth & allow partial landing without inflatin
 ## Update Log
 
 (Add newest entries at top)
+
+- 2025-08-25: Added boss pattern screenshot CI job (P2-20) capturing deterministic patterns (laser-cross, safe-lane-volley, multi-beam-intersect, future-converge, spiral-barrage, pre-laser-arc-preview, laser-arc-sweep); artifacts uploaded as pattern-screenshots. Will mark complete after verifying first GitHub Actions run artifacts.
 
 - 2025-08-25: Implemented economy (enemy bounty -> coins) & survivability (armor/health, damage flash, death overlay, in-place restart). Overdrive meter & active state HUD (P2-12) complete. Safe lane intensity slider fully wired (P2-15). HUD redesign partial (P2-15a) – remaining: upgrade icons, power-up timers, coin gain polish (P2-15b in progress). Added non-reload resetGame scaffold.
 	- 2025-08-25: Fairness auto-adjust scaffold: added adjustmentFactor (widen heuristic) + event 'fairnessAdjust'; recentHits decay & unsafe time heuristic (P2-4 partial). Added theme accessibility auto-selection & audit, highContrastDark palette, UI controls for auto mode + interval.
