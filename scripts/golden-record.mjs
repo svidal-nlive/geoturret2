@@ -15,7 +15,9 @@ function getArg(name, def) {
   const idx = process.argv.indexOf(`--${name}`);
   return (idx !== -1 && idx + 1 < process.argv.length) ? process.argv[idx + 1] : def;
 }
-const casesArg = getArg('cases', 'g1:6,g2:10');
+// Default case list must stay aligned with committed golden baseline (`golden/runRecordings.json`).
+// If you add/remove cases, rotate goldens via `npm run golden:rotate -- --cases <list>`.
+const casesArg = getArg('cases', 'g1:6,g2:10,g3-parallax:6,g4-grazeOD:8,g5-boss:14,g6-boss-safe:22,g7-boss-multi:26,g8-boss-future:16,g9-boss-spiral:20');
 const out = getArg('out', 'golden/runRecordings.actual.json');
 const fixedStep = parseFloat(getArg('step', (1/60).toString()));
 
