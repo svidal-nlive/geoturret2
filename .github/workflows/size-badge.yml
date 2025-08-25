@@ -1,4 +1,7 @@
 name: Size Badge
+concurrency:
+  group: badge-updates
+  cancel-in-progress: false
 permissions:
   contents: write
 
@@ -29,7 +32,13 @@ jobs:
           else
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git fetch origin main
+            git pull --rebase origin main || true
             git add size-badge.svg
             git commit -m "chore: update size badge [skip ci]"
-            git push
+            for i in 1 2 3; do
+              if git push; then echo "Pushed badge update"; break; fi;
+              echo "Push failed (attempt $i), retrying in 3s"; sleep 3;
+              git fetch origin main && git pull --rebase origin main || true;
+            done
           fi

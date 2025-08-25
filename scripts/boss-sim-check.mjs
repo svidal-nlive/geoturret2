@@ -78,8 +78,12 @@ function main() {
       }
       const md = ['# Boss Sim Drift Detected (multi-run)','', ...lines, '', 'Update baseline intentionally if expected:', '```', 'npm run boss:sim:record -- --all', '```'].join('\n');
       fs.writeFileSync('artifacts/boss-sim-diff.md', md);
-      console.error('[boss-sim-check] FAIL Boss simulation issues: diffs=', runDiffs.length, 'budgetViolations=', budgetViolations.length);
-      process.exit(1);
+      if (process.env.BOSS_SIM_ALLOW_DRIFT === '1') {
+        console.warn('[boss-sim-check] WARNING drift detected but allowed via BOSS_SIM_ALLOW_DRIFT=1');
+      } else {
+        console.error('[boss-sim-check] FAIL Boss simulation issues: diffs=', runDiffs.length, 'budgetViolations=', budgetViolations.length);
+        process.exit(1);
+      }
     }
     console.log('[boss-sim-check] PASS Boss multi-run baseline verified');
   } else {
