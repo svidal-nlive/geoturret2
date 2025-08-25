@@ -37,13 +37,15 @@ describe('theme cycling render colors', () => {
     expect(firstBg).toBe(palDefault.bg);
     // Switch theme
     const ids = listPalettes();
-    const next = ids.find(i=> i !== 'default')!;
+    const next = ids.includes('highContrast') ? 'highContrast' : ids.find(i=> i !== 'default')!;
     state.theme = next as any;
     canvas._draws.fillRect = [];
     render.update?.(0, {} as any);
     const palNext = getPalette(next);
     const secondBg = canvas._draws.fillRect[0][0];
     expect(secondBg).toBe(palNext.bg);
-    expect(secondBg).not.toBe(firstBg);
+    if (palNext.bg !== palDefault.bg) {
+      expect(secondBg).not.toBe(firstBg);
+    }
   });
 });

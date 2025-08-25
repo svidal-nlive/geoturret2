@@ -52,6 +52,7 @@
   "ci:verify:size": "npm run size:regression",
   "vuln:enforce": "node scripts/vuln-enforce.mjs",
   "ci:roadmap-sync": "node scripts/check-roadmap-sync.mjs",
+  "ci:full": "bash scripts/ci-full.sh",
   "ci:sim:battery": "npm run test:sim:all && npm run test:sim:boss",
   "ci:sim:boss": "npm run boss:sim:check",
   "p1:exit": "node scripts/p1-exit-gate.mjs",
