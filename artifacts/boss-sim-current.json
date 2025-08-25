@@ -7,14 +7,14 @@
       "started": true,
       "ended": true,
       "startedFrame": 0,
-      "endedFrame": 751,
-      "durationFrames": 751,
-      "frame": 752,
-      "time": 12.533333333333536,
-      "rngState": 1399266092,
-      "kills": 11,
+      "endedFrame": 771,
+      "durationFrames": 771,
+      "frame": 772,
+      "time": 12.866666666666886,
+      "rngState": 2231424015,
+      "kills": 12,
       "wave": 1,
-      "hash": "4abdefe7"
+      "hash": "2ca12ee5"
     },
     {
       "seed": "boss-sim-safe",
@@ -22,14 +22,14 @@
       "started": true,
       "ended": true,
       "startedFrame": 0,
-      "endedFrame": 907,
-      "durationFrames": 907,
-      "frame": 908,
-      "time": 15.133333333333665,
-      "rngState": 3470958340,
+      "endedFrame": 921,
+      "durationFrames": 921,
+      "frame": 922,
+      "time": 15.36666666666701,
+      "rngState": 4057053063,
       "kills": 15,
       "wave": 1,
-      "hash": "1309eccb"
+      "hash": "232426a0"
     },
     {
       "seed": "boss-sim-multi",
@@ -37,14 +37,14 @@
       "started": true,
       "ended": true,
       "startedFrame": 0,
-      "endedFrame": 883,
-      "durationFrames": 883,
-      "frame": 884,
-      "time": 14.733333333333645,
-      "rngState": 2794517335,
-      "kills": 16,
+      "endedFrame": 877,
+      "durationFrames": 877,
+      "frame": 878,
+      "time": 14.63333333333364,
+      "rngState": 301885323,
+      "kills": 15,
       "wave": 1,
-      "hash": "e33cc061"
+      "hash": "14d6159c"
     },
     {
       "seed": "boss-sim-future",
@@ -52,14 +52,14 @@
       "started": true,
       "ended": true,
       "startedFrame": 0,
-      "endedFrame": 906,
-      "durationFrames": 906,
-      "frame": 907,
-      "time": 15.116666666666998,
-      "rngState": 3934225692,
-      "kills": 21,
+      "endedFrame": 885,
+      "durationFrames": 885,
+      "frame": 886,
+      "time": 14.76666666666698,
+      "rngState": 2187931867,
+      "kills": 20,
       "wave": 1,
-      "hash": "03de59f3"
+      "hash": "a99f35f5"
     },
     {
       "seed": "boss-sim-spiral",
@@ -67,14 +67,14 @@
       "started": true,
       "ended": true,
       "startedFrame": 0,
-      "endedFrame": 1046,
-      "durationFrames": 1046,
-      "frame": 1047,
-      "time": 17.45000000000029,
-      "rngState": 1374592786,
-      "kills": 29,
+      "endedFrame": 1006,
+      "durationFrames": 1006,
+      "frame": 1007,
+      "time": 16.783333333333662,
+      "rngState": 4134768694,
+      "kills": 24,
       "wave": 2,
-      "hash": "ff6ee466"
+      "hash": "8da303b1"
     },
     {
       "seed": "boss-sim-script",
@@ -82,14 +82,14 @@
       "started": true,
       "ended": true,
       "startedFrame": 0,
-      "endedFrame": 719,
-      "durationFrames": 719,
-      "frame": 720,
-      "time": 12.000000000000176,
-      "rngState": 538772512,
-      "kills": 10,
+      "endedFrame": 730,
+      "durationFrames": 730,
+      "frame": 731,
+      "time": 12.183333333333518,
+      "rngState": 7856804,
+      "kills": 11,
       "wave": 1,
-      "hash": "6c6fc3e4"
+      "hash": "e3b7fa51"
     },
     {
       "seed": "boss-sim-phase",
@@ -97,14 +97,14 @@
       "started": true,
       "ended": true,
       "startedFrame": 0,
-      "endedFrame": 976,
-      "durationFrames": 976,
-      "frame": 977,
-      "time": 16.28333333333369,
-      "rngState": 870923810,
+      "endedFrame": 971,
+      "durationFrames": 971,
+      "frame": 972,
+      "time": 16.20000000000036,
+      "rngState": 3478076264,
       "kills": 17,
       "wave": 1,
-      "hash": "005241ed"
+      "hash": "4c401331"
     }
   ]
 }

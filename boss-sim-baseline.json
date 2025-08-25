@@ -5,78 +5,78 @@
       "seed": "boss-sim-seed",
       "bossPattern": "laser-cross",
       "startedFrame": 0,
-      "endedFrame": 751,
-      "durationFrames": 751,
+      "endedFrame": 771,
+      "durationFrames": 771,
       "wave": 1,
-      "kills": 11,
-      "hash": "4abdefe7",
-      "maxEndedFrameBudget": 776
+      "kills": 12,
+      "hash": "2ca12ee5",
+      "maxEndedFrameBudget": 796
     },
     {
       "seed": "boss-sim-safe",
       "bossPattern": "safe-lane-volley",
       "startedFrame": 0,
-      "endedFrame": 907,
-      "durationFrames": 907,
+      "endedFrame": 921,
+      "durationFrames": 921,
       "wave": 1,
       "kills": 15,
-      "hash": "1309eccb",
-      "maxEndedFrameBudget": 932
+      "hash": "232426a0",
+      "maxEndedFrameBudget": 946
     },
     {
       "seed": "boss-sim-multi",
       "bossPattern": "multi-beam-intersect",
       "startedFrame": 0,
-      "endedFrame": 883,
-      "durationFrames": 883,
+      "endedFrame": 877,
+      "durationFrames": 877,
       "wave": 1,
-      "kills": 16,
-      "hash": "e33cc061",
-      "maxEndedFrameBudget": 908
+      "kills": 15,
+      "hash": "14d6159c",
+      "maxEndedFrameBudget": 902
     },
     {
       "seed": "boss-sim-future",
       "bossPattern": "future-converge",
       "startedFrame": 0,
-      "endedFrame": 906,
-      "durationFrames": 906,
+      "endedFrame": 885,
+      "durationFrames": 885,
       "wave": 1,
-      "kills": 21,
-      "hash": "03de59f3",
-      "maxEndedFrameBudget": 931
+      "kills": 20,
+      "hash": "a99f35f5",
+      "maxEndedFrameBudget": 910
     },
     {
       "seed": "boss-sim-spiral",
       "bossPattern": "spiral-barrage",
       "startedFrame": 0,
-      "endedFrame": 1046,
-      "durationFrames": 1046,
+      "endedFrame": 1006,
+      "durationFrames": 1006,
       "wave": 2,
-      "kills": 29,
-      "hash": "ff6ee466",
-      "maxEndedFrameBudget": 1071
+      "kills": 24,
+      "hash": "8da303b1",
+      "maxEndedFrameBudget": 1031
     },
     {
       "seed": "boss-sim-script",
       "bossPattern": "scripted-demo",
       "startedFrame": 0,
-      "endedFrame": 719,
-      "durationFrames": 719,
+      "endedFrame": 730,
+      "durationFrames": 730,
       "wave": 1,
-      "kills": 10,
-      "hash": "6c6fc3e4",
-      "maxEndedFrameBudget": 744
+      "kills": 11,
+      "hash": "e3b7fa51",
+      "maxEndedFrameBudget": 755
     },
     {
       "seed": "boss-sim-phase",
       "bossPattern": "phase-fork-demo",
       "startedFrame": 0,
-      "endedFrame": 976,
-      "durationFrames": 976,
+      "endedFrame": 971,
+      "durationFrames": 971,
       "wave": 1,
       "kills": 17,
-      "hash": "005241ed",
-      "maxEndedFrameBudget": 1001
+      "hash": "4c401331",
+      "maxEndedFrameBudget": 996
     }
   ]
 }
