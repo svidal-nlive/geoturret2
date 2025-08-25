@@ -20,8 +20,9 @@ export function createRenderSystem(state) {
         if (!canvas || !ctx)
             return;
         ctx.save();
-        const baseX = canvas.width / (2 * devicePixelRatio);
-        const baseY = canvas.height / (2 * devicePixelRatio);
+        const dpr = (typeof devicePixelRatio !== 'undefined' ? (devicePixelRatio || 1) : 1);
+        const baseX = canvas.width / (2 * dpr);
+        const baseY = canvas.height / (2 * dpr);
         ctx.translate(baseX, baseY);
         const z = state.camera.zoom || 1;
         ctx.scale(z, z);
@@ -31,7 +32,7 @@ export function createRenderSystem(state) {
         ctx.restore(); }
     return {
         id: 'render', order: 100,
-        init: () => { if (typeof window !== 'undefined')
+        init: () => { if (typeof document !== 'undefined')
             init(); },
         update: () => {
             if (!canvas || !ctx)
@@ -128,13 +129,8 @@ export function createRenderSystem(state) {
                     ctx.save();
                     const intensity = (state.safeLaneHighlightIntensity == null ? 1 : state.safeLaneHighlightIntensity);
                     const alphaBoost = telegraph ? (1 + Math.min(0.5, (fairnessAdj - 1) * 0.5)) : 1;
-                    if (telegraph) {
-                        const pulse = 0.9 + Math.sin(performance.now() / 300) * 0.1 * Math.min(1, fairnessAdj - 1);
-                        ctx.globalAlpha = (telegraph ? 0.35 : 0.15) * intensity * alphaBoost * pulse;
-                    }
-                    else {
-                        ctx.globalAlpha = (telegraph ? 0.35 : 0.15) * intensity * alphaBoost;
-                    }
+                    const baseAlpha = telegraph ? 0.35 : 0.15;
+                    ctx.globalAlpha = baseAlpha * intensity * alphaBoost;
                     ctx.fillStyle = safeLane === 0 ? pal.safeLaneSafe : pal.safeLaneHazard;
                     const widthScale = telegraph ? (1 + Math.min(0.15, (fairnessAdj - 1) * 0.15)) : 1;
                     const teleWidth = 1600 * widthScale;
