@@ -1,0 +1,6 @@
+# Generated build/test artifacts (not hand-authored docs)
+artifacts/
+coverage/
+dist-baseline/
+golden/
+perf-baseline.archive/

@@ -3,6 +3,7 @@
 Deterministic frame-driven mini DSL powering scripted boss patterns.
 
 ## Goals
+
 - Deterministic execution (resume-safe, replay-safe).
 - Minimal authoring surface (imperative steps with explicit waits / forks).
 - Bounded per-frame work (runaway protection).
@@ -23,14 +24,14 @@ Helpers:
 - `repeat(times, ...steps)` simple unrolled duplication.
 
 ## Execution Model
- 
+
 - Single `ScriptRunner` walks a mutable `steps[]` array.
 - Certain steps mutate the array in place (branch & loop expansion) to keep indices monotonic & serialization simple.
 - Per-frame loop executes sequential steps until encountering a blocking condition (`wait` not finished, `join` waiting on branches) or completion.
 - Runaway guard: `maxStepsPerFrame` (default 100) throws `ScriptRuntimeError` if exceeded.
 
 ## Concurrency (fork/join)
- 
+
 - `fork` assigns an incrementing token; splices the current step into a `join` placeholder and creates child runners (branches each get an auto `join(token,'autoJoin')`).
 - Parent `join` step each frame updates all branch runners; if all done it aggregates child metrics & label counts then advances.
 - Branch runner serialization nests recursively preserving partial progress across resume.
@@ -76,7 +77,7 @@ Resume path uses `ScriptRunner.deserialize` to rebuild tree structure; branch me
 These metrics are surfaced in boss perf attribution matrix & variance guard to catch instability (e.g. fluctuating fork fan-out altering RNG draws).
 
 ## Error Handling
- 
+
 `ScriptRuntimeError` enriches thrown errors with:
 - `stepKind`
 - `label`
@@ -89,11 +90,11 @@ Validation examples:
 - Runaway per-frame step explosion
 
 ## Abort Flow
- 
+
 Patterns can be aborted externally via boss summary flag `bossAbortRequested=true` (system-level) or directly through internal helper `__scriptAbort()` in tests. Aborting marks runner done without executing remaining steps. Metrics reflect `aborted=true`.
 
 ## Determinism & Resume
- 
+
 Guarantees:
 - Resuming mid-run yields identical final `executedLabelCounts`, `rngDraws`, and structural completion (`idx` at done) as continuous execution.
 - Forked branch progress preserved precisely; no double execution after join aggregation.
@@ -104,14 +105,14 @@ Testing:
 - Duplication guard verifies continuous uniqueness plus parity after resume.
 
 ## Authoring Guidance
- 
+
 - Prefer few RNG draws; cache draw results and derive deterministic values arithmetically.
 - Label meaningful `do` steps that spawn gameplay entities or mark phase transitions (enables perf/variance diffing).
 - Keep loop predicates cheap & side-effect free.
 - Avoid embedding large dynamic data in steps; compute on demand in `do`.
 
 ## Extensibility Roadmap
- 
+
 Planned (future):
 - Timed `parallel` sugar (fork + wait + auto join pattern)
 - `sequence(...blocks)` grouping with local abort scopes
@@ -119,7 +120,7 @@ Planned (future):
 - Authoring validation / static analyzer for common pitfalls (unlabelled high-impact do steps)
 
 ## Debugging Tips
- 
+
 Enable serialization debug during tests:
 ```bash
 SCRIPT_DUP_DEBUG=1 npm test -- path/to/test
@@ -129,7 +130,7 @@ Look for `[ScriptRunner.serialize]` / `deserialize` logs to trace fork tree evol
 Inspect live metrics during perf tests by reading `bossPatternScriptMetrics` from the orchestrator summary.
 
 ## Invariants Monitored in CI
- 
+
 - No unexpected variance in `rngDraws` (stddev guard)
 - Stable `doCalls`, `forkLaunches`, `loopIterations` counts for a given pattern+seed matrix
 - Label execution counts remain 1 for idempotent steps (unless intentionally repeated via loops)
