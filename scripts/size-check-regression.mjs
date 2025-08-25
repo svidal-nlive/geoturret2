@@ -8,18 +8,35 @@
  */
 import fs from 'node:fs';
 import zlib from 'node:zlib';
-import { spawnSync } from 'node:child_process';
+import { build } from 'esbuild';
 
 const BUNDLE = 'dist/size-check.js';
+function selectEntry() {
+  const candidates = [process.env.SIZE_ENTRY, 'src/size-entry.ts', 'src/sizeEntry.ts', 'src/main.ts'].filter(Boolean);
+  for (const c of candidates) { if (fs.existsSync(c)) return c; }
+  return 'src/main.ts';
+}
+const ENTRY = selectEntry();
 const BASELINE_FILE = 'size-baseline.json';
 const ABS_LIMIT_KB = 5; // absolute cushion
 const PCT_LIMIT = 0.05; // 5%
 
-function ensureBundle() {
-  if (!fs.existsSync(BUNDLE)) {
-    const res = spawnSync('npm', ['run','size:build'], { stdio: 'inherit' });
-    if (res.status !== 0) process.exit(res.status||1);
-  }
+async function ensureBundle() {
+  // Always rebuild to capture current tree (fast, <100ms) and produce metafile for diagnostics
+  const start = Date.now();
+  const result = await build({
+    entryPoints: [ENTRY],
+    bundle: true,
+    minify: true,
+    format: 'esm',
+    sourcemap: true,
+    outfile: BUNDLE,
+    metafile: true,
+    define: { 'process.env.NODE_ENV': '"production"' }
+  });
+  const dur = Date.now() - start;
+  try { fs.writeFileSync('dist/size-meta.json', JSON.stringify(result.metafile, null, 2)); } catch {}
+  return { metafile: result.metafile, ms: dur };
 }
 
 function currentGzipKb() {
@@ -46,8 +63,9 @@ function saveBaseline(kb) {
   console.log('[size-regression] wrote baseline', kb+'KB');
 }
 
-function main() {
-  ensureBundle();
+async function main() {
+  console.log('[size-regression] entry', ENTRY);
+  const buildInfo = await ensureBundle();
   const cur = currentGzipKb();
   const baseline = loadBaseline();
   if (baseline == null) {
@@ -65,6 +83,20 @@ function main() {
   if (fail) {
     console.error('[size-regression] Size regression exceeded limits (abs>'+ABS_LIMIT_KB+'KB || pct>'+(PCT_LIMIT*100)+'%)');
     console.error('Set SIZE_ALLOW_REGRESSION=1 to bypass (will update baseline).');
+    // Emit top contributors for quick triage using metafile if available
+    try {
+      const meta = buildInfo.metafile;
+      if (meta && meta.inputs) {
+        const entries = Object.entries(meta.inputs).map(([k,v]) => [k, v.bytes]).sort((a,b)=>b[1]-a[1]).slice(0,12);
+        const total = entries.reduce((s,[,b])=>s+b,0);
+        console.error('[size-regression] Top contributors (bytes):');
+        for (const [file, bytes] of entries) console.error('  -', file, bytes);
+        console.error('[size-regression] Top subset total bytes =', total);
+        // Heuristic: highlight obvious UI / optional modules
+        const hints = entries.filter(([f]) => /audio|hud|theme|overdrive|fairness|economy|survivability/i.test(f));
+        if (hints.length) console.error('[size-regression] Hint: Consider conditional loading or feature flags for', hints.map(h=>h[0]).slice(0,5));
+      }
+    } catch {}
     process.exit(1);
   }
   if (allowOverride && diff > 0) {
