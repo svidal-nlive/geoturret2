@@ -259,3 +259,38 @@ jobs:
         with:
           name: playwright-failing-traces
           path: playwright-failing-traces
+
+  pattern-screenshots:
+    needs: smoke-playwright
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install deps
+        run: npm ci
+      - name: Build (for preview server)
+        run: npm run build
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Start Preview Server
+        run: npm run preview &
+      - name: Wait for Server
+        run: npx wait-on http://localhost:4173
+      - name: Capture Pattern Screenshots
+        run: |
+          set -e
+          mkdir -p artifacts/patterns
+          patterns="laser-cross safe-lane-volley multi-beam-intersect future-converge spiral-barrage pre-laser-arc-preview laser-arc-sweep"
+          for p in $patterns; do
+            echo "Capturing $p";
+            node scripts/pattern-screenshot.mjs --pattern "$p" --seed ci-$p --frames 420 --out artifacts/patterns/$p.png || echo "Failed $p";
+          done
+      - name: Upload Pattern Screenshot Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pattern-screenshots
+          path: artifacts/patterns
