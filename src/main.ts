@@ -14,6 +14,7 @@ import { createParallaxSystem } from './systems/parallaxSystem';
 import { createFairnessSystem } from './systems/fairnessSystem';
 import { createGrazeSystem } from './systems/grazeSystem';
 import { createOverdriveSystem } from './systems/overdriveSystem';
+import { createBossSystem, BossSystemSummary } from './systems/bossSystem';
 import { createEconomySystem } from './systems/economySystem';
 import { createSurvivabilitySystem } from './systems/survivabilitySystem';
 import { createAudioManager } from './audio/audioManager';
@@ -27,6 +28,7 @@ const autoPause = url.searchParams.get('autopause') === '1';
 const ls = (typeof localStorage !== 'undefined') ? localStorage : undefined;
 const urlTheme = url.searchParams.get('theme');
 const urlMotion = url.searchParams.get('motion');
+const urlPattern = url.searchParams.get('pattern'); // optional explicit boss pattern id
 const urlLaneIntensity = url.searchParams.get('laneIntensity');
 
 // Authoritative state object (kept stable reference so systems retain pointer)
@@ -56,6 +58,14 @@ orchestrator.register(createGrazeSystem(gameState));
 orchestrator.register(createOverdriveSystem(gameState));
 orchestrator.register(createEconomySystem(gameState));
 orchestrator.register(createSurvivabilitySystem(gameState));
+// Boss system (Phase 2 content). Allow explicit ?pattern= override for screenshot / automation harness.
+const bossSummary: BossSystemSummary = { bossActive: false };
+orchestrator.register(createBossSystem(bossSummary, gameState, { triggerWave: 1, patternId: urlPattern || undefined, seed }));
+// Expose minimal boss debug API for automation (screenshots, CI artifacts)
+(window as any).boss = {
+  summary: () => ({ ...bossSummary }),
+  abort: () => { bossSummary.bossAbortRequested = true; }
+};
 
 // Audio manager (non-system; lightweight update in loop)
 const audioMgr = createAudioManager(gameState, 1);

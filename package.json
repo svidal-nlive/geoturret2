@@ -39,6 +39,7 @@
     "registry:summary": "node scripts/registry-summary.mjs",
     "registry:versionmap": "node scripts/registry-versionmap.mjs",
     "pr:comment:summary": "node scripts/pr-comment-summary.mjs",
+  "pattern:screenshot": "node scripts/pattern-screenshot.mjs",
     "lint:ts": "eslint . --ext .ts,.tsx --max-warnings=0",
     "lint:md": "markdownlint -c .markdownlint.jsonc '**/*.md' --ignore node_modules",
     "lint": "npm run lint:ts && npm run lint:md",

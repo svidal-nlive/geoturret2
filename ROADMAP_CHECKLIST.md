@@ -68,14 +68,14 @@ Add date-stamped notes under the related phase section when status changes. Exam
 | P2-16 | Hold-to-reroll interaction | [ ] | |
 | P2-17 | Rarity / discount badges + tooltips | [ ] | |
 | P2-18 | Reroll cost scaling feedback | [ ] | |
-| P2-19 | Playwright smoke tests | [ ] | |
+| P2-19 | Playwright smoke tests | [x] | 2025-08-25 baseline smoke + accessibility strict gate merged |
 | P2-20 | Boss pattern screenshot capture | [ ] | |
 | P2-21 | Failure artifact export (images + seed JSON) | [ ] | |
 | P2-22 | Shop categorization & layout reorg | [ ] | |
 | P2-23 | Settings menu grouping | [ ] | |
 | P2-24 | Client telemetry schema (local export) | [ ] | |
 | P2-25 | Bundle size budget enforcement | [ ] | |
-| P2-26 | Automated accessibility scan (axe-core) | [ ] | |
+| P2-26 | Automated accessibility scan (axe-core) | [x] | 2025-08-25 strict axe (0 violations) enforced in smoke.spec |
 | P2-27 | Telegraph safety coverage harness | [ ] | |
 | P2-XC | Exit criteria met (patterns, accessibility, smoke green) | [ ] | Gate |
 
