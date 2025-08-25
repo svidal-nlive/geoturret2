@@ -1,4 +1,6 @@
 name: Coverage Badge
+permissions:
+  contents: write
 
 on:
   push:

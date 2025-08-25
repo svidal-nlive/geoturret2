@@ -15,7 +15,6 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: fs
-          security-checks: vuln,secret,config
           exit-code: '0' # non-blocking initially
           format: 'table'
           ignore-unfixed: true

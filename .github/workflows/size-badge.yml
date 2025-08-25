@@ -1,4 +1,6 @@
 name: Size Badge
+permissions:
+  contents: write
 
 on:
   push:
