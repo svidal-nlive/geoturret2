@@ -102,4 +102,13 @@ describe('boss pattern spawn counts', () => {
     // Spawns: Phase A: 4 waves *6 =24, Phase B: 4 waves *8=32, Pulse: 2*12=24 => 80 potential kills (some may survive)
     expect(delta).toBeGreaterThanOrEqual(20); // conservative lower bound
   });
+  it('spiral-barrage increases kills vs baseline due to repeated spiral bursts', () => {
+    const duration = 20; // seconds (warmup 1s + 4s active + cleanup)
+    const baseline = runBaseline('boss-spiral-test', duration).kills;
+    const { state, summary } = runWithBoss('boss-spiral-test', duration);
+    const durationFrames = (summary.bossEndedFrame! - summary.bossStartedFrame!);
+    const delta = state.kills - baseline;
+    expect(durationFrames).toBeGreaterThanOrEqual(280); // warmup+active ~300 frames, allow variance from delayed start
+    expect(delta).toBeGreaterThanOrEqual(10); // 12 bursts * 6 potential = 72; expect at least 10 kills realized
+  });
 });

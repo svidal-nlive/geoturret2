@@ -17,9 +17,12 @@ const CASES = [
   ,{ seed: 'g6-boss-safe', duration: 22 }
   ,{ seed: 'g7-boss-multi', duration: 26 }
   ,{ seed: 'g8-boss-future', duration: 16 }
+  ,{ seed: 'g9-boss-spiral', duration: 20 }
 ];
 
 describe('golden run recordings', () => {
+  // Force golden mode for deterministic, frozen progression tuning independent of future balance changes.
+  process.env.GOLDEN_MODE = '1';
   it('match stored golden recordings (set UPDATE_GOLDENS=1 to regenerate)', () => {
   const recs = CASES.map(c => recordRun({ seed: c.seed, duration: c.duration, withParallax: c.seed.includes('parallax') }));
     if (process.env.UPDATE_GOLDENS) {

@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { upgradeSnapshot, AnyRunSnapshot } from './serialization';
 
 describe('snapshot upgrade path', () => {
-  it('upgrades v1/v2/v3 snapshots to v5 with defaults', () => {
+  it('upgrades v1/v2/v3 snapshots to v6 with defaults', () => {
     const base = { frame: 5, time: 0.0833333333, rngState: 12345, registries: { enemies: [] }, registryHash: 'deadbeef' };
     const v1: AnyRunSnapshot = { version: 1, ...base, summary: { kills: 2, wave: 0 } } as any;
     const v2: AnyRunSnapshot = { version: 2, ...base, summary: { kills: 3, wave: 1 } } as any;
@@ -14,7 +14,7 @@ describe('snapshot upgrade path', () => {
 
     // Common expectations
     for (const u of [u1, u2, u3]) {
-      expect(u.version).toBe(5);
+  expect(u.version).toBe(7);
       expect(typeof u.summary.grazeCount).toBe('number');
       expect(u.summary.grazeCount).toBe(0);
       expect(u.summary.overdriveMeter).toBe(0);

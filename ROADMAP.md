@@ -23,28 +23,28 @@ Core Tasks:
 - ✅ Module extraction (`engine`, `systems`, `content`, `state`, `devtools`)
 - ✅ Deterministic RNG wrapper; injected across systems (shim removed)
 - ✅ Centralized event bus (lightweight) for UI & dev tools
-- ⏳ Expand object pooling (particles, powerups, coins, enemy shots already pooled; add pattern projectiles)
-- ⏳ Data registries: `enemies`, `powerups`, `upgrades`, `waveMods`, `bossPatterns`
-- ⏳ Boss pattern scripting interface (timeline/state machine API)
-- ✅ State serialization (run summary + seed export + restore path v1, migration TBD)
-- ⏳ Basic unit tests: spawn budget, wave progression, graze/overdrive, pooling recycle
-- ⏳ Headless simulation test (waves 1–15) parity check
+- ✅ Expand object pooling (pattern projectiles & particles pooled + reuse tests in place)
+- ✅ Data registries (ids + versions + hash + summary + versionMap helper & diff tooling)
+- ✅ Boss pattern scripting interface (timeline/state machine execution engine, instrumentation, resume parity, metrics, docs)
+- ✅ State serialization (run summary + seed export + restore path) (schema v7: boss lifecycle, graze/overdrive, versionMap, bossPatternState script runner persistence)
+- ✅ Basic unit tests: spawn budget, wave progression, graze/overdrive, pooling recycle (P1-8 core suite complete)
+- ✅ Headless simulation test (waves 1–15) parity check (accelerated deterministic harness + progression signature & boss multi-run guard)
 - ✅ Performance micro-profiler (dev overlay) – update vs render split
-- 🧩 CI pipeline scaffold (lint, unit, golden, build, size done; simulation/smoke pending)
-- ⏳ Dependency & image vulnerability scan (npm audit + Trivy)
+- ✅ CI pipeline (lint, typecheck, coverage, golden replay + versionMap diff, perf check, size, registry freshness, extended sim & roadmap sync guard, boss multi-run determinism, vuln enforcement baseline). Pending in Phase 2: Playwright smoke, accessibility scan gating.
+- ✅ Dependency & image vulnerability scan (npm audit enforced for prod deps + Trivy workflow; severity policy to refine later)
 - ✅ Early error boundary & ring buffer logging (moved up from Phase 4)
 - (Removed) RNG wrapper shim (all legacy Math.random eliminated)
 - ✅ Camera lead, bounds, deadzone, zoom & shake refinements
 - ✅ Parallax background system + persistence (URL + localStorage) & runtime layer APIs
-- ✅ Snapshot schema v3 (parallax layer metadata) & golden recording regeneration (added parallax validation)
+- ✅ Snapshot schema v3 (parallax layer metadata) -> evolved to v7 (bossPatternState for mid-pattern resume)
 
 Exit Criteria:
 
-- All v1 mechanics functional (waves, modifiers, shop, boss phases) running through refactored pipeline
-- Simulation test passes deterministically ≥3 consecutive runs with same seed
-- Frame time not worse than v1 (>10% regression budget flagged)
-- CI pipeline passes all configured stages (lint, unit, sim, build, bundle size)
-- Error boundary captures and buffers runtime errors for export
+- All v1 mechanics functional (waves, modifiers, shop, boss phases) running through refactored pipeline (FOUNDATIONAL SUBSET ACHIEVED; shop UI polish & modifiers breadth deferred to Phase 2 scope per 2025-08-24 note)
+- Simulation test passes deterministically ≥3 consecutive runs with same seed (accelerated harness + boss multi-pattern baseline)
+- Frame time not worse than v1 (>10% regression budget flagged) (perf thresholds + micro-profiler tests green)
+- CI pipeline passes all configured stages (lint, unit, sim, build, bundle size, boss determinism, registry freshness) (smoke/accessibility deferred to Phase 2)
+- Error boundary captures and buffers runtime errors for export (implemented & tested)
 
 ## Phase 2 – Content & Clarity (Beta)
 
@@ -66,14 +66,16 @@ Wave Modifiers 2.0:
 
 Accessibility & UX:
 
-- ⏳ Motion reduction mode (disable shake/parallax, particle cap)
-- ⏳ Overdrive explicit meter (fill + duration countdown)
-- ⏳ Audio ducking (laser / shield break) + master volume slider
-- ⏳ Enhanced color palettes (dark + high contrast + colorblind sets)
-- ⏳ Safe lane highlight intensity slider
-- ⏳ HUD redesign (distinct health vs armor, coin counter + gain delta flash, active upgrade icons w/ stacks, power-up timers)
-- ⏳ Coin gain feedback polish (aggregate bursts, pulse animation)
-- ⏳ Upgrade summary panel (collapsible / persistent strip) (see `UI_WIREFRAMES.md` §1)
+		- 🧩 Motion reduction mode (camera shake suppression, particle thinning, burst suppression, HUD effect simplification, parallax freeze + overdrive pulse removal; pending: explicit parallax toggle UX & audio ducking tie-in) (2025-08-25)
+	- ✅ Overdrive explicit meter (fill + duration countdown + active state text) (2025-08-25)
+		- 🧩 Audio ducking (playerHit / death events, master volume slider; pending: sound asset integration & category balancing) (2025-08-25)
+	- 🧩 Enhanced color palettes (dark + high contrast + colorblind sets + contrast audit tooling)
+	- ✅ Safe lane highlight intensity slider (state + API + UI slider + persistence) (2025-08-25)
+	- 🧩 HUD redesign (implemented: coins/wave/seed, overdrive meter line & pct, health & armor bars with low/critical states + dynamic pulse, coin delta flash placeholder, damage flash, death overlay & restart; pending: upgrade icons, power-up timers, shop integration polish) (2025-08-25)
+	- ⏳ Coin gain feedback polish (aggregate bursts, pulse animation)
+	- ⏳ Upgrade summary panel (collapsible / persistent strip) (see `UI_WIREFRAMES.md` §1)
+	- ✅ Enemy bounty & coin economy system (kill -> coins, single-award guard, HUD coin delta groundwork) (2025-08-25)
+	- ✅ Survivability system (armor absorbs then health, events, damage flash, death overlay & non-reload restart scaffolding) (2025-08-25)
 
 Shop & Economy:
 
@@ -193,6 +195,10 @@ This roadmap will evolve; major deltas reflected in CHANGELOG and annotated here
 
 Update Notes:
 
+- 2025-08-24: Phase 1 exit gate (P1-XC) implemented (`p1-exit-gate.mjs`) aggregating core integration, progression parity, deterministic sim verify, boss multi-pattern baseline, performance thresholds, registry freshness. CI + local run PASS. Marked headless simulation, CI pipeline, and dependency scan tasks complete; snapshot schema noted at v7. Remaining Phase 1 originally-scoped shop/mod breadth moved explicitly to Phase 2.
+
+- 2025-08-24: Boss pattern scripting engine finalized (fork/join aggregation, executedLabelCounts + rngDraws parity instrumentation, nested fork parity & metrics schema guard tests). Snapshot schema advanced to v7 adding `bossPatternState` for mid-pattern resume determinism. ROADMAP & checklist updated (P1-6 complete). Added SCRIPT_ENGINE.md and README link.
+
 - 2025-08-22: Marked module extraction, event bus, profiler, RNG shim, camera enhancements, parallax system, and snapshot v3 as complete; partial status for RNG full injection & serialization restore path. Added golden replay validation note.
 	- Added error boundary ring buffer implementation & tests.
 		- Added initial CI workflow (lint, typecheck, tests, golden, build, bundle size, perf optional) & size budget script (gzip limit 130KB).
@@ -201,3 +207,7 @@ Update Notes:
 	- Overall test coverage stabilized ~90% statements (v8 provider) after focused runtime tests & exclusions.
 	- Added long-run accelerated simulation harness (`simCore.ts`, `sim-run.ts`) + determinism verify + baseline hash check integrated into CI.
 	- Committed initial simulation baseline (`scripts/sim-baseline.json`) for gameplay drift detection (wave 15 hash lock).
+- 2025-08-23: RNG injection completed (legacy Math.random removed); snapshot schema bumped to v5 (boss lifecycle, graze/overdrive metrics); performance baseline tooling enhanced (robust spike trimming, per-seed memory enforcement); new boss pattern `spiral-barrage` integrated with golden & spawn delta test; bullet system optimized (angle precompute, batched spawns) reducing spike volatility.
+- 2025-08-23: Snapshot schema bumped to v6 (versionMap for registries) + registry version fields & validation tests added.
+	- Added Registries.versionMap helper + versionMap diff in golden replay workflow; registry summary freshness check & script fallback to source.
+	- Data registries breadth & balance moved to Phase 2 Content Registry breakdown (CR list) to keep Phase 1 focused on platform foundations.

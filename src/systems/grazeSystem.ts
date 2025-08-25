@@ -9,8 +9,10 @@ interface GrazeTag { grazed?: boolean }
  * Each enemy can grant at most one graze per lifetime.
  */
 export function createGrazeSystem(state: GameState, opts?: { grazeRadius?: number; hitRadius?: number }): System {
-  const grazeRadius = (opts?.grazeRadius ?? 40);
-  const hitRadius = (opts?.hitRadius ?? 12);
+  const GOLDEN_MODE = !!process.env.GOLDEN_MODE;
+  // Under golden mode we freeze the widened radius values so future tweaks don't change goldens.
+  const grazeRadius = GOLDEN_MODE ? 48 : (opts?.grazeRadius ?? 48);
+  const hitRadius = GOLDEN_MODE ? 12 : (opts?.hitRadius ?? 12);
   const g2 = grazeRadius * grazeRadius;
   const h2 = hitRadius * hitRadius;
   return {

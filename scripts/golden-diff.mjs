@@ -17,7 +17,7 @@ const actual = JSON.parse(fs.readFileSync(actualPath, 'utf-8'));
 const golden = JSON.parse(fs.readFileSync(goldenPath, 'utf-8'));
 
 // Enforce full expected case list to catch accidental omissions (can skip via GOLDEN_SKIP_CASE_CHECK=1)
-const expectedSeeds = ['g1','g2','g3-parallax','g4-grazeOD','g5-boss','g6-boss-safe','g7-boss-multi','g8-boss-future'];
+const expectedSeeds = ['g1','g2','g3-parallax','g4-grazeOD','g5-boss','g6-boss-safe','g7-boss-multi','g8-boss-future','g9-boss-spiral'];
 if (!process.env.GOLDEN_SKIP_CASE_CHECK) {
   const goldenSeeds = golden.recordings.map(r=>r.seed);
   if (goldenSeeds.join(',') !== expectedSeeds.join(',')) {
@@ -38,7 +38,8 @@ function summarizeSnapshot(s) {
     g: s.summary.grazeCount ?? 0,
     om: s.summary.overdriveMeter ?? 0,
     oa: !!s.summary.overdriveActive,
-    p: (s.summary.parallaxLayers || []).map(l => ({ d: l.depth, c: l.color, ts: l.tileSize, s: l.step }))
+  p: (s.summary.parallaxLayers || []).map(l => ({ d: l.depth, c: l.color, ts: l.tileSize, s: l.step })),
+  vm: s.versionMap || {}
   };
 }
 
@@ -69,6 +70,11 @@ for (let i=0;i<len;i++) {
           if (ap.s && ap.s !== gp.s) problems.push(`p[${j}].s:${ap.s}!=${gp.s}`);
         }
       }
+    } else if (f === 'vm') {
+      const keys = new Set([...Object.keys(av), ...Object.keys(gv)]);
+      for (const k of keys) {
+        if (av[k] !== gv[k]) problems.push(`vm.${k}:${av[k]}!=${gv[k]}`);
+      }
     } else if (av !== gv) {
       problems.push(`${f}:${av}!=${gv}`);
     }
@@ -79,4 +85,37 @@ for (let i=0;i<len;i++) {
   }
 }
 if (!diffs) console.log('[golden-diff] OK (no differences)');
-else { console.log(`[golden-diff] total differing cases: ${diffs}`); process.exit(1); }
+else {
+  console.log(`[golden-diff] total differing cases: ${diffs}`);
+  // Write markdown summary for CI comment/artifact
+  try {
+    const lines = [];
+    // Re-run loop to collect details (simpler than storing earlier)
+    for (let i=0;i<len;i++) {
+      const a = actual.recordings[i];
+      const g = golden.recordings[i];
+      const header = `case#${i} seed=${a.seed}`;
+      const problems = [];
+      const fields = ['seed','duration','kills','wave'];
+      for (const f of fields) { if (a[f] !== g[f]) problems.push(`${f}:${a[f]}!=${g[f]}`); }
+      const as = summarizeSnapshot(a.final); const gs = summarizeSnapshot(g.final);
+      const cmpAgain = Object.keys(as);
+      for (const f of cmpAgain) { const av = as[f]; const gv = gs[f];
+        if (Array.isArray(av) && Array.isArray(gv)) {
+          if (av.length !== gv.length) { problems.push(`parallax.len:${av.length}!=${gv.length}`); }
+        } else if (f === 'vm') {
+          const keys = new Set([...Object.keys(av), ...Object.keys(gv)]);
+          for (const k of keys) { if (av[k] !== gv[k]) problems.push(`vm.${k}:${av[k]}!=${gv[k]}`); }
+        } else if (av !== gv) {
+          problems.push(`${f}:${av}!=${gv}`);
+        }
+      }
+      if (problems.length) lines.push(`- ${header}: ${problems.join(', ')}`);
+    }
+    if (lines.length) {
+      fs.mkdirSync('artifacts', { recursive: true });
+      fs.writeFileSync('artifacts/golden-diff-summary.md', lines.join('\n'));
+    }
+  } catch (e) { /* ignore */ }
+  process.exit(1);
+}

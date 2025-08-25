@@ -1,0 +1,82 @@
+{
+  "version": 3,
+  "runs": [
+    {
+      "seed": "boss-sim-seed",
+      "bossPattern": "laser-cross",
+      "startedFrame": 0,
+      "endedFrame": 751,
+      "durationFrames": 751,
+      "wave": 1,
+      "kills": 11,
+      "hash": "4abdefe7",
+      "maxEndedFrameBudget": 776
+    },
+    {
+      "seed": "boss-sim-safe",
+      "bossPattern": "safe-lane-volley",
+      "startedFrame": 0,
+      "endedFrame": 907,
+      "durationFrames": 907,
+      "wave": 1,
+      "kills": 15,
+      "hash": "1309eccb",
+      "maxEndedFrameBudget": 932
+    },
+    {
+      "seed": "boss-sim-multi",
+      "bossPattern": "multi-beam-intersect",
+      "startedFrame": 0,
+      "endedFrame": 883,
+      "durationFrames": 883,
+      "wave": 1,
+      "kills": 16,
+      "hash": "e33cc061",
+      "maxEndedFrameBudget": 908
+    },
+    {
+      "seed": "boss-sim-future",
+      "bossPattern": "future-converge",
+      "startedFrame": 0,
+      "endedFrame": 906,
+      "durationFrames": 906,
+      "wave": 1,
+      "kills": 21,
+      "hash": "03de59f3",
+      "maxEndedFrameBudget": 931
+    },
+    {
+      "seed": "boss-sim-spiral",
+      "bossPattern": "spiral-barrage",
+      "startedFrame": 0,
+      "endedFrame": 1046,
+      "durationFrames": 1046,
+      "wave": 2,
+      "kills": 29,
+      "hash": "ff6ee466",
+      "maxEndedFrameBudget": 1071
+    },
+    {
+      "seed": "boss-sim-script",
+      "bossPattern": "scripted-demo",
+      "startedFrame": 0,
+      "endedFrame": 719,
+      "durationFrames": 719,
+      "wave": 1,
+      "kills": 10,
+      "hash": "6c6fc3e4",
+      "maxEndedFrameBudget": 744
+    },
+    {
+      "seed": "boss-sim-phase",
+      "bossPattern": "phase-fork-demo",
+      "startedFrame": 0,
+      "endedFrame": 976,
+      "durationFrames": 976,
+      "wave": 1,
+      "kills": 17,
+      "hash": "005241ed",
+      "maxEndedFrameBudget": 1001
+    }
+  ]
+}

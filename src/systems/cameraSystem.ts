@@ -64,8 +64,8 @@ export function createCameraSystem(state: GameState, opts?: { stiffness?: number
       // Zoom smoothing toward targetZoom
       const zoomLerp = 1 - Math.exp(-zoomStiff * dt);
       state.camera.zoom += (state.camera.targetZoom - state.camera.zoom) * zoomLerp;
-      // Shake update
-      if (state.camera.shakeRemaining > 0) {
+  // Shake update (respect motion reduction accessibility flag)
+  if (!state.motionReduction && state.camera.shakeRemaining > 0) {
         state.camera.shakeRemaining -= dt;
         const t = state.camera.shakeDuration - state.camera.shakeRemaining;
         const progress = Math.max(0, state.camera.shakeRemaining) / state.camera.shakeDuration;

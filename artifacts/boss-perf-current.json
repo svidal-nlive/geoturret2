@@ -1,0 +1,10 @@
+{
+  "pattern": "phase-fork-demo",
+  "seed": "attrib-phase",
+  "frames": 900,
+  "updateMs": 2.955,
+  "serializeMs": 0.871,
+  "avgUpdateMs": 0.0033,
+  "avgSerializeMs": 0.001,
+  "serializePct": 22.77
+}

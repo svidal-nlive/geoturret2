@@ -12,11 +12,20 @@
     "test:watch": "vitest",
     "test:sim:long": "tsx scripts/sim-run.ts",
     "test:sim:verify": "tsx scripts/sim-verify.ts",
-    "test:sim:baseline": "tsx scripts/sim-baseline-check.ts",
+  "test:sim:baseline": "tsx scripts/sim-baseline-check.ts",
+  "test:sim:extended": "tsx scripts/sim-extended.ts",
+  "test:sim:all": "npm run test:sim:verify && npm run test:sim:baseline && npm run test:sim:extended",
+  "test:sim:boss": "tsx scripts/sim-boss.ts",
+  "boss:sim:record": "node scripts/boss-sim-record.mjs",
+  "boss:sim:record:all": "node scripts/boss-sim-record.mjs -- --all",
+  "boss:sim:check": "node scripts/boss-sim-check.mjs",
     "test:golden": "GOLDEN_REQUIRE_EXTENDED=1 vitest run src/devtools/golden.replay.test.ts",
     "perf:baseline": "node scripts/perf-baseline.mjs",
     "perf:check": "node scripts/perf-check.mjs",
     "perf:regen": "node scripts/perf-regenerate.mjs",
+  "boss:perf": "tsx scripts/boss-perf-attrib.ts",
+  "boss:perf:check": "node scripts/boss-perf-check.mjs",
+  "boss:perf:publish": "node scripts/boss-perf-publish.mjs",
     "golden:record": "node scripts/golden-record.mjs",
     "golden:diff": "node scripts/golden-diff.mjs --actual golden/runRecordings.actual.json --golden golden/runRecordings.json",
     "golden:monitor": "node scripts/golden-monitor.mjs",
@@ -34,12 +43,22 @@
     "lint:md": "markdownlint -c .markdownlint.jsonc '**/*.md' --ignore node_modules",
     "lint": "npm run lint:ts && npm run lint:md",
     "build": "vite build",
+  "preview": "vite preview",
     "size:build": "esbuild src/main.ts --bundle --minify --sourcemap --format=esm --outfile=dist/size-check.js",
     "size:check": "npm run size:build && node -e \"const fs=require('fs');const z=require('zlib');const b=fs.readFileSync('dist/size-check.js');const gz=z.gzipSync(b);const kb=(gz.length/1024).toFixed(2);const limit=130;console.log('gzip KB',kb,'limit',limit);if(gz.length/1024>limit){console.error('Size limit exceeded');process.exit(1);}\"",
     "size:badge": "npm run size:build && node scripts/size-badge.mjs",
   "size:regression": "node scripts/size-check-regression.mjs",
   "ci:verify:size": "npm run size:regression",
-    "smoke": "echo 'Playwright smoke pending Phase 2' && exit 0",
+  "vuln:enforce": "node scripts/vuln-enforce.mjs",
+  "ci:roadmap-sync": "node scripts/check-roadmap-sync.mjs",
+  "ci:sim:battery": "npm run test:sim:all && npm run test:sim:boss",
+  "ci:sim:boss": "npm run boss:sim:check",
+  "p1:exit": "node scripts/p1-exit-gate.mjs",
+    "smoke": "playwright test --config=playwright.config.ts --project=chromium --grep @smoke",
+  "smoke:pw": "playwright test --config=playwright.config.ts --reporter=line",
+  "smoke:pw:ci": "playwright test --config=playwright.config.ts --project=chromium",
+  "a11y:scan": "playwright test --config=playwright.config.ts -g accessibility",
+  "ci:smoke": "npm run smoke:pw:ci",
     "prepare": "husky install"
   },
   "devDependencies": {
@@ -55,5 +74,7 @@
     "typescript": "^5.5.4",
     "vite": "^5.3.3",
     "vitest": "^1.5.0"
+  , "@playwright/test": "^1.47.0"
+  , "@axe-core/playwright": "^4.9.0"
   }
 }

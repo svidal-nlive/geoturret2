@@ -113,6 +113,15 @@ export function replayRun(rec: RunRecording): ReplayResult {
   if (Math.abs(snap.time - recFinalUpgraded.time) > 1e-9) diffs.push(`time mismatch ${snap.time} != ${recFinalUpgraded.time}`);
   if (snap.rngState !== recFinalUpgraded.rngState) diffs.push('rngState mismatch');
   if (snap.registryHash !== recFinalUpgraded.registryHash) diffs.push('registryHash mismatch');
+  // Version map drift detection (schema v6)
+  if (recFinalUpgraded.versionMap) {
+    const keys = new Set([...Object.keys(recFinalUpgraded.versionMap), ...Object.keys((snap as any).versionMap || {})]);
+    for (const k of keys) {
+      const a = (snap as any).versionMap?.[k];
+      const b = recFinalUpgraded.versionMap[k];
+      if (a !== b) diffs.push(`versionMap mismatch ${k}:${a}!=${b}`);
+    }
+  }
   if (snap.summary.kills !== rec.kills) diffs.push(`kills mismatch ${snap.summary.kills} != ${rec.kills}`);
   if (snap.summary.wave !== rec.wave) diffs.push(`wave mismatch ${snap.summary.wave} != ${rec.wave}`);
   if (process.env.GOLDEN_REQUIRE_EXTENDED) {

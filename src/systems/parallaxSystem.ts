@@ -78,9 +78,24 @@ export function createParallaxSystem(state: GameState, layers?: ParallaxLayerCon
   }
   // Ensure state.parallax exists
   if (!state.parallax) state.parallax = { layers: [] };
+  let frozen = false; // freeze positions but keep layers
+  let disabled = false; // hide all layers
+  if (typeof window !== 'undefined') {
+    (window as any).parallaxSetFrozen = (v: boolean) => { frozen = !!v; };
+    (window as any).parallaxSetDisabled = (v: boolean) => { disabled = !!v; };
+    (window as any).parallaxGetState = () => ({ frozen, disabled });
+  }
   return {
     id: 'parallax', order: 80, // before render (100)
     update: (_dt: number, _ctx: OrchestratorContext) => {
+      if (disabled || state.motionReduction) {
+        // When disabled or motionReduction active, keep last static snapshot (no scrolling)
+        if (state.parallax!.layers.length === 0) {
+          state.parallax!.layers = layerDefs.map(ld => ({ depth: ld.depth, offsetX: 0, offsetY: 0, color: ld.color, tileSize: ld.tileSize, step: ld.step }));
+        }
+        return;
+      }
+      if (frozen) return; // do not update offsets
       state.parallax!.layers = layerDefs.map(ld => ({ depth: ld.depth, offsetX: state.camera.x * ld.depth, offsetY: state.camera.y * ld.depth, color: ld.color, tileSize: ld.tileSize, step: ld.step }));
     }
   };

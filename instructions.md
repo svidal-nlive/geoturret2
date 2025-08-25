@@ -58,6 +58,8 @@ Refer to `PRD.md` and `ROADMAP.md` before starting any feature—if it is not li
    - Confirm no console errors.
 6. Commit & Push
    - Conventional message: `feat: add deterministic RNG wrapper` or `fix: correct overdrive decay edge case`.
+   - Immediately after a successful local validation (steps 4–5) and before opening the PR, update BOTH `ROADMAP.md` (narrative if scope/description changed) and `ROADMAP_CHECKLIST.md` (status flip `[ ] -> [>] -> [x]`). Do not defer roadmap/checklist synchronization to a later PR – it must ship atomically with the code change.
+   - In the same commit (or series within the feature branch) add a short "Remaining Phase X Focus" line to the PR description draft listing the highest‑impact unfinished items in the current phase (e.g. `Remaining Phase 1 focus: P1-SpawnBudgetMetrics, P1-HeadlessSim-Gate, P1-VulnScanThresholds`). This keeps prioritization visible and prevents drift.
 7. Container Build & Stack Validation (Mandatory Before PR)
    - Production build: `npm run build`.
    - Build image: `docker build -t geoturret2:dev .` (or `docker compose build`).
@@ -71,8 +73,9 @@ Refer to `PRD.md` and `ROADMAP.md` before starting any feature—if it is not li
    - FPS overlay (dev mode) should remain green majority of time (frame update < budget). If not, profile before PR.
 9. Open Pull Request
 
-- Include summary, acceptance criteria, test evidence (seed + simulation run output), and any perf notes.
-- Update `ROADMAP_CHECKLIST.md`: mark completed items `[x]` in the same PR (or `[~]` if partial) with a dated note in Update Log.
+ - Include summary, acceptance criteria, test evidence (seed + simulation run output), and any perf notes.
+ - Update `ROADMAP_CHECKLIST.md`: mark completed items `[x]` in the same PR (or `[~]` if partial) with a dated note in Update Log.
+ - Add a "Remaining Phase Items" section enumerating all still-open checklist IDs for the current phase (quick scan of `ROADMAP_CHECKLIST.md`). If the list is long, include the top 3 critical path items first under a subheading `Priority Next`.
 
 1. Review & Merge
 
@@ -266,6 +269,8 @@ The file `ROADMAP_CHECKLIST.md` is the canonical progress ledger. Management rul
 - Source of Truth: Narrative intent lives in `ROADMAP.md`; granular status lives in `ROADMAP_CHECKLIST.md`.
 - Single Responsibility per Row: Do not bundle multiple deliverables under one ID; split if scope diverges.
 - Atomic Commits: Status flips occur in the same commit/PR as the code change when feasible.
+   - Mandatory Sync: Any PR that implements or meaningfully advances a roadmap item MUST update both `ROADMAP.md` (if narrative changed or item newly fulfilled) and `ROADMAP_CHECKLIST.md`. CI / reviewers should reject PRs lacking this unless commit message explicitly contains `no-checklist-change` (reserved only for tooling / doc formatting).
+   - Remaining Phase Visibility: Each PR description must include a concise list of remaining open items for the current phase (IDs only) plus a `Priority Next` shortlist (≤3) to reinforce focus.
 - Date Stamps: Always include `YYYY-MM-DD` when adding a note (UTC assumed) in the Update Log.
 - Conflict Resolution: If concurrent PRs edit the same checklist region, rebase and re-apply the minimal diff; avoid overwriting unrelated status changes.
 - Cancellation: Strike through the row label and append rationale (e.g., `~~P2-11 Motion reduction mode~~ superseded by global Accessibility refactor`).

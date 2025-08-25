@@ -10,6 +10,10 @@ export interface BossPattern {
   update(dt: number, ctx: OrchestratorContext): boolean;
   /** Optional clean-up */
   end?(ctx: OrchestratorContext): void;
+  /** Serialize internal execution state for persistence (optional). */
+  serializeState?(): any;
+  /** Restore internal execution state previously serialized (optional). */
+  restoreState?(state: any): void;
 }
 
 export type BossPatternFactory = () => BossPattern;

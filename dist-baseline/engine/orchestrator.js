@@ -60,6 +60,7 @@ export class GameOrchestrator {
             for (const s of this.systems)
                 s.update(this.step, ctx);
         }
+        globalThis.__frame = this.frame;
         this.frame++;
         this.time += this.step;
         eventBus.emit('frame', { frame: this.frame, time: this.time });
@@ -87,5 +88,12 @@ export class GameOrchestrator {
         const snap = createSnapshot({ frame: this.frame, time: this.time, rng: this.rng, state: this.summarySource?.() });
         eventBus.emit('snapshot', { frame: snap.frame, time: snap.time, registryHash: snap.registryHash, summary: snap.summary });
         return snap;
+    }
+    restore(meta) {
+        this.frame = meta.frame;
+        this.time = meta.time;
+        this.accumulator = 0;
+        if (this.rng.restore)
+            this.rng.restore(meta.rngState);
     }
 }

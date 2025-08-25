@@ -18,6 +18,8 @@ jobs:
         run: npm ci
       - name: Lint (TS + Markdown)
         run: npm run lint
+      - name: Roadmap / Checklist Sync Guard
+        run: npm run ci:roadmap-sync
       - name: Type Check
         run: npm run typecheck
       - name: Unit & Coverage Tests
@@ -39,6 +41,21 @@ jobs:
         run: npm run test:sim:verify
       - name: Long Simulation Baseline Hash
         run: npm run test:sim:baseline
+      - name: Extended Simulation Scenarios
+        run: npm run test:sim:extended
+      - name: Boss Pattern Simulation (headless deterministic guard)
+        run: npm run boss:sim:check
+      - name: Upload Boss Sim Artifacts (baseline/current/diff)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: boss-sim-artifacts
+          path: |
+            boss-sim-baseline.json
+            artifacts/boss-sim-current.json
+            artifacts/boss-sim-diff.md
+            artifacts/boss-sim-failure-*.json
+            artifacts/boss-sim-summary.md
       - name: Build
         run: npm run build
       - name: Bundle Size Check
@@ -47,6 +64,8 @@ jobs:
         run: npm run size:regression
       - name: Vulnerability Scan (non-blocking)
         run: npm audit --omit=dev || true
+      - name: Vulnerability Enforcement (prod deps)
+        run: npm run vuln:enforce || (echo "Soft fail (treat as warning)" && true)
 
   perf-check:
     needs: build-test
@@ -68,6 +87,18 @@ jobs:
           else \
             echo "No perf-baseline.json found; skipping perf-check (create baseline and commit to enable)"; \
           fi
+      - name: Boss Pattern Perf Guard
+        run: npm run boss:perf:check
+      - name: Boss Pattern Perf Publish Artifact
+        run: npm run boss:perf:publish || true
+      - name: Upload Boss Perf Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: boss-perf
+          path: |
+            artifacts/boss-perf-current.json
+            artifacts/boss-perf-matrix.json
 
   golden-replay:
     needs: build-test
@@ -85,8 +116,8 @@ jobs:
         run: npm run golden:record -- --cases g1:6,g2:10,g3-parallax:6,g4-grazeOD:8,g5-boss:14,g6-boss-safe:22,g7-boss-multi:26,g8-boss-future:16 --out golden/runRecordings.actual.json
       - name: Golden Diff (concise drift summary)
         run: npm run golden:diff
-        - name: Golden monitor (informational)
-          run: npm run golden:monitor || true
+      - name: Golden monitor (informational)
+        run: npm run golden:monitor || true
       - name: Upload Golden Diff Summary Artifact (if present)
         if: always()
         uses: actions/upload-artifact@v4
@@ -130,6 +161,15 @@ jobs:
           if [ -f artifacts-all/golden-diff-summary/golden-diff-summary.md ]; then cp artifacts-all/golden-diff-summary/golden-diff-summary.md artifacts/golden-diff-summary.md; fi
           if [ -f artifacts-all/versionmap-diff/versionmap-diff.json ]; then cp artifacts-all/versionmap-diff/versionmap-diff.json artifacts/versionmap-diff.json; fi
           if [ -f artifacts-all/coverage-report/coverage/coverage-summary.json ]; then cp artifacts-all/coverage-report/coverage/coverage-summary.json coverage-summary.json.tmp && mkdir -p coverage && cp artifacts-all/coverage-report/coverage/coverage-summary.json coverage/coverage-summary.json; fi
+          if [ -f artifacts-all/boss-sim-artifacts/boss-sim-summary.md ]; then cp artifacts-all/boss-sim-artifacts/boss-sim-summary.md artifacts/boss-sim-summary.md; fi
+      - name: Phase 1 Exit Gate (aggregate)
+        run: npm run p1:exit || true
+      - name: Upload P1 Exit Summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p1-exit-summary
+          path: artifacts/p1-exit-summary.md
       - name: Generate PR Comment Summary
         run: npm run pr:comment:summary
       - name: Upload PR Comment Summary Artifact
@@ -158,3 +198,64 @@ jobs:
               core.info('Creating new PR summary comment');
               await github.rest.issues.createComment({ owner, repo, issue_number: prNumber, body: fullBody });
             }
+
+  smoke-playwright:
+    needs: build-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install deps
+        run: npm ci
+      - name: Build (for preview server)
+        run: npm run build
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Run Playwright Smoke
+        run: npm run smoke:pw
+      - name: Upload Playwright JSON Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report.json
+      - name: Upload Playwright JUnit Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-junit
+          path: playwright-junit.xml
+      - name: Upload Playwright HTML Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-html-report
+          path: playwright-html-report
+      - name: Collect Failing Traces Only
+        if: failure()
+        run: |
+          set -e
+          mkdir -p playwright-failing-traces
+          # Copy only per-test folders that have a trace.zip or *-failed screenshot
+          for d in test-results/*; do
+            [ -d "$d" ] || continue
+            if ls "$d"/trace.zip "$d"/*-failed*.png 2>/dev/null 1>&2; then
+              dest="playwright-failing-traces/$(basename "$d")"
+              mkdir -p "$dest"
+              [ -f "$d/trace.zip" ] && cp "$d/trace.zip" "$dest/"
+              for f in "$d"/*-failed*.png; do [ -f "$f" ] && cp "$f" "$dest/"; done
+              # Also capture test output log/context if present
+              for extra in error-context.md stdout.txt stderr.txt; do
+                [ -f "$d/$extra" ] && cp "$d/$extra" "$dest/"; done
+            fi
+          done
+          if [ "$(ls -A playwright-failing-traces)" = "" ]; then echo "No failing traces found" > playwright-failing-traces/README.txt; fi
+      - name: Upload Failing Traces Artifact
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-failing-traces
+          path: playwright-failing-traces

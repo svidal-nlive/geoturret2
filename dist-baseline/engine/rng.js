@@ -1,5 +1,8 @@
 export class RNG {
     state;
+    _draws = 0;
+    static enableCounting = !!process.env.RNG_DRAW_COUNT_MODE;
+    get draws() { return this._draws; }
     constructor(seed) {
         if (typeof seed === 'string') {
             let h = 5381;
@@ -16,6 +19,8 @@ export class RNG {
     }
     next() {
         this.state = (1664525 * this.state + 1013904223) >>> 0;
+        if (RNG.enableCounting)
+            this._draws++;
         return this.state / 0x100000000;
     }
     int(min, max) {

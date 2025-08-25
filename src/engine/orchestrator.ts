@@ -95,6 +95,8 @@ export class GameOrchestrator {
     } else {
       for (const s of this.systems) s.update(this.step, ctx);
     }
+  // Expose frame globally for lightweight logging helpers (non-authoritative)
+  (globalThis as any).__frame = this.frame;
     this.frame++;
     this.time += this.step;
     eventBus.emit('frame', { frame: this.frame, time: this.time });

@@ -98,8 +98,18 @@ Keys:
 - `s` log deterministic snapshot to console
 - `space` pause/unpause simulation
 - `.` advance one fixed step while paused
+- `o` open/close settings dialog
+- `m` toggle motion reduction
+- `Shift+[` / `Shift+]` decrease / increase safe lane highlight intensity (0.1–1.0) (temporary dev hotkey)
 
 Overlay fields: seed, frame, time, kills, wave, pool usage (enemy & bullet inUse/free), pause indicator, optional system timings. Kills & pool stats should be identical for same seed & simulated time across reloads. Wave currently advances on kill thresholds (scaling target: initial 10, +25% rounded each wave).
+
+Accessibility Runtime APIs (`window.accessibility`):
+
+- `setMotionReduction(bool)` / `getMotionReduction()`
+- `setSafeLaneIntensity(number 0.1-1)` / `getSafeLaneIntensity()` (persists; URL param `laneIntensity` overrides on load)
+
+Phase 2 HUD Progress: Structured top HUD (coins / wave / seed + overdrive metrics) and bottom health & armor bars added; live coin awarding (enemy bounty -> coin counter + delta flash) implemented via economy system. Upgrade icons & power-up timers pending.
 
 Determinism quick check: reload with same seed and compare logged snapshot `rngState` after ~1s.
 
@@ -305,6 +315,8 @@ patchEsmImports('dist-baseline');
 ```
 
 ### Boss Patterns & Projectile Effects
+
+Boss pattern timelines use a deterministic mini script engine (`do`, `wait`, `if`, `loopUntil`, `fork`, `join`) with resume-safe serialization (snapshot schema v7). See [SCRIPT_ENGINE.md](./SCRIPT_ENGINE.md) for step semantics, metrics, determinism guarantees, and authoring guidance.
 
 Boss patterns introduce deterministic scripted challenge phases launched after the first wave (configurable). Current patterns:
 

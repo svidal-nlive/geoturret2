@@ -4,19 +4,20 @@ import { GameOrchestrator, System } from '../engine/orchestrator';
 import { GameState } from './gameState';
 import { Registries } from '../content/registries';
 
-export const SCHEMA_VERSION = 5 as const; // v5: boss lifecycle fields mandatory in summary
+export const SCHEMA_VERSION = 7 as const; // v7: add bossPatternState serialization for active boss patterns
 interface RunSnapshotV1 { version: 1; frame: number; time: number; rngState: number; registries: any; registryHash: string; summary: { kills: number; wave: number } }
 interface RunSnapshotV2 { version: 2; frame: number; time: number; rngState: number; registries: any; registryHash: string; summary: { kills: number; wave: number } }
 interface RunSnapshotV3 { version: 3; frame: number; time: number; rngState: number; registries: any; registryHash: string; summary: { kills: number; wave: number; parallaxLayers?: any[] } }
 interface RunSnapshotV4 { version: 4; frame: number; time: number; rngState: number; registries: any; registryHash: string; summary: { kills: number; wave: number; grazeCount?: number; overdriveMeter?: number; overdriveActive?: boolean; bossActive?: boolean; bossPattern?: string; bossStartedFrame?: number; bossEndedFrame?: number; parallaxLayers?: any[] } }
-export interface RunSnapshotMeta { version: typeof SCHEMA_VERSION; frame: number; time: number; rngState: number; registries: ReturnType<typeof Registries.snapshot>; registryHash: string; summary: { kills: number; wave: number; grazeCount: number; overdriveMeter: number; overdriveActive: boolean; bossActive: boolean; bossPattern: string | null; bossStartedFrame: number | null; bossEndedFrame: number | null; parallaxLayers?: { depth: number; color?: string; tileSize?: number; step?: number }[] } }
-export type AnyRunSnapshot = RunSnapshotV1 | RunSnapshotV2 | RunSnapshotV3 | RunSnapshotV4 | RunSnapshotMeta;
+interface RunSnapshotV5 { version: 5; frame: number; time: number; rngState: number; registries: any; registryHash: string; summary: { kills: number; wave: number; grazeCount: number; overdriveMeter: number; overdriveActive: boolean; bossActive: boolean; bossPattern: string | null; bossStartedFrame: number | null; bossEndedFrame: number | null; parallaxLayers?: any[] } }
+export interface RunSnapshotMeta { version: typeof SCHEMA_VERSION; frame: number; time: number; rngState: number; registries: ReturnType<typeof Registries.snapshot>; registryHash: string; versionMap: Record<string, number>; summary: { kills: number; wave: number; grazeCount: number; overdriveMeter: number; overdriveActive: boolean; bossActive: boolean; bossPattern: string | null; bossStartedFrame: number | null; bossEndedFrame: number | null; bossPatternState?: any; parallaxLayers?: { depth: number; color?: string; tileSize?: number; step?: number }[] } }
+export type AnyRunSnapshot = RunSnapshotV1 | RunSnapshotV2 | RunSnapshotV3 | RunSnapshotV4 | RunSnapshotV5 | RunSnapshotMeta;
 
 /**
  * Create a deterministic run snapshot including RNG state, registry integrity hash and a lightweight
  * run summary (kills, wave). Wave remains a placeholder until wave progression system lands.
  */
-export function createSnapshot(meta: { frame: number; time: number; rng: RNG; state?: Pick<GameState,'kills'|'wave'|'grazeCount'|'overdriveMeter'|'overdriveActive'> & { bossActive?: boolean; bossPattern?: string; bossStartedFrame?: number; bossEndedFrame?: number; parallaxLayers?: { depth: number; color?: string; tileSize?: number; step?: number }[] } }): RunSnapshotMeta {
+export function createSnapshot(meta: { frame: number; time: number; rng: RNG; state?: Pick<GameState,'kills'|'wave'|'grazeCount'|'overdriveMeter'|'overdriveActive'> & { bossActive?: boolean; bossPattern?: string; bossStartedFrame?: number; bossEndedFrame?: number; bossPatternState?: any; parallaxLayers?: { depth: number; color?: string; tileSize?: number; step?: number }[] } }): RunSnapshotMeta {
   const rngState = (meta.rng as any).snapshot ? (meta.rng as any).snapshot() : 0;
   const kills = meta.state?.kills ?? 0;
   const wave = meta.state?.wave ?? 0;
@@ -28,14 +29,19 @@ export function createSnapshot(meta: { frame: number; time: number; rng: RNG; st
   const bossPattern = (meta.state as any)?.bossPattern ?? null;
   const bossStartedFrame = (meta.state as any)?.bossStartedFrame ?? null;
   const bossEndedFrame = (meta.state as any)?.bossEndedFrame ?? null;
+  const bossPatternState = (meta.state as any)?.bossPatternState;
+  // Build versionMap (ids -> version) for future persistence & drift analysis
+  const snapIds = Registries.snapshot();
+  const versionMap = Registries.versionMap();
   return {
-  version: SCHEMA_VERSION,
+    version: SCHEMA_VERSION,
     frame: meta.frame,
     time: meta.time,
     rngState,
-    registries: Registries.snapshot(),
+    registries: snapIds,
     registryHash: Registries.hash(),
-    summary: { kills, wave, grazeCount, overdriveMeter, overdriveActive, bossActive, bossPattern, bossStartedFrame, bossEndedFrame, parallaxLayers }
+    versionMap,
+  summary: { kills, wave, grazeCount, overdriveMeter, overdriveActive, bossActive, bossPattern, bossStartedFrame, bossEndedFrame, bossPatternState, parallaxLayers }
   };
 }
 
@@ -96,13 +102,27 @@ export function upgradeSnapshot(s: AnyRunSnapshot): RunSnapshotMeta {
   const bossPattern = version >=4 ? ensure(base.summary.bossPattern ?? null, null) : null;
   const bossStartedFrame = version >=4 ? ensure(base.summary.bossStartedFrame ?? null, null) : null;
   const bossEndedFrame = version >=4 ? ensure(base.summary.bossEndedFrame ?? null, null) : null;
+  const bossPatternState = version >=7 ? base.summary.bossPatternState : undefined;
+  // Derive versionMap for legacy snapshots lacking it.
+  const versionMap: Record<string, number> = (base as any).versionMap || {};
+  // If missing, populate with default 1 for known ids present in registries snapshot.
+  if (!(base as any).versionMap && base.registries) {
+    const reg = base.registries;
+    const add = (prefix: string, arr: string[]) => arr?.forEach((id: string) => { versionMap[prefix+id] = 1; });
+    add('enemy:', reg.enemies || []);
+    add('powerup:', reg.powerups || []);
+    add('upgrade:', reg.upgrades || []);
+    add('waveMod:', reg.waveMods || []);
+    add('bossPattern:', reg.bossPatterns || []);
+  }
   return {
-  version: SCHEMA_VERSION,
+    version: SCHEMA_VERSION,
     frame: base.frame,
     time: base.time,
     rngState: base.rngState,
     registries: base.registries,
     registryHash: base.registryHash,
+    versionMap,
     summary: {
       kills: base.summary.kills,
       wave: base.summary.wave,
@@ -113,7 +133,8 @@ export function upgradeSnapshot(s: AnyRunSnapshot): RunSnapshotMeta {
       bossActive,
       bossPattern,
       bossStartedFrame,
-      bossEndedFrame
+  bossEndedFrame,
+  bossPatternState
     }
   };
 }

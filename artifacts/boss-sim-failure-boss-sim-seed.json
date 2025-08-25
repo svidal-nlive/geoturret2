@@ -1,0 +1,12 @@
+{
+  "seed": "boss-sim-seed",
+  "bossPattern": "laser-cross",
+  "started": false,
+  "ended": true,
+  "frame": 752,
+  "time": 12.533333333333536,
+  "rngState": 1399266092,
+  "kills": 11,
+  "wave": 1,
+  "hash": "b87d9e32"
+}

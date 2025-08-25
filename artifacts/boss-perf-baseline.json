@@ -1,0 +1,25 @@
+{
+  "pattern": "phase-fork-demo",
+  "seed": "attrib-phase",
+  "frames": 900,
+  "updateMs": 3.18,
+  "serializeMs": 0.975,
+  "avgUpdateMs": 0.0035,
+  "avgSerializeMs": 0.0011,
+  "serializePct": 23.46,
+  "thresholds": {
+    "serializePctMax": 35,
+  "avgUpdateMsMax": 0.01,
+  "serializePctStdDevMax": 5,
+  "avgUpdateMsStdDevMax": 0.0012
+  },
+  "matrix": {
+    "patterns": ["phase-fork-demo", "spiral-barrage"],
+    "seeds": ["attrib-phase", "alt-seed"]
+  },
+  "rotation": {
+    "autoUpdateRequiresEnv": "PERF_ALLOW_ROTATION",
+    "retrySamples": 3,
+    "aggregation": "median"
+  }
+}

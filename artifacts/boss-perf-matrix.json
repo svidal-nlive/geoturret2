@@ -1,0 +1,290 @@
+{
+  "thresholds": {
+    "serializePctMax": 35,
+    "avgUpdateMsMax": 0.01,
+    "serializePctStdDevMax": 5,
+    "avgUpdateMsStdDevMax": 0.0012
+  },
+  "results": [
+    {
+      "pattern": "phase-fork-demo",
+      "seed": "attrib-phase",
+      "samples": [
+        {
+          "pattern": "phase-fork-demo",
+          "seed": "attrib-phase",
+          "frames": 900,
+          "updateMs": 2.921,
+          "serializeMs": 1.001,
+          "avgUpdateMs": 0.0032,
+          "avgSerializeMs": 0.0011,
+          "serializePct": 25.53,
+          "scriptMetrics": {
+            "totalSteps": 963,
+            "doCalls": 37,
+            "ifEvals": 3,
+            "loopIterations": 18,
+            "forkLaunches": 1,
+            "waitFrames": 837,
+            "joinWaitFrames": 63,
+            "done": false,
+            "aborted": false,
+            "idx": 67
+          }
+        },
+        {
+          "pattern": "phase-fork-demo",
+          "seed": "attrib-phase",
+          "frames": 900,
+          "updateMs": 3.324,
+          "serializeMs": 0.839,
+          "avgUpdateMs": 0.0037,
+          "avgSerializeMs": 0.0009,
+          "serializePct": 20.16,
+          "scriptMetrics": {
+            "totalSteps": 963,
+            "doCalls": 37,
+            "ifEvals": 3,
+            "loopIterations": 18,
+            "forkLaunches": 1,
+            "waitFrames": 837,
+            "joinWaitFrames": 63,
+            "done": false,
+            "aborted": false,
+            "idx": 67
+          }
+        },
+        {
+          "pattern": "phase-fork-demo",
+          "seed": "attrib-phase",
+          "frames": 900,
+          "updateMs": 2.998,
+          "serializeMs": 1.091,
+          "avgUpdateMs": 0.0033,
+          "avgSerializeMs": 0.0012,
+          "serializePct": 26.68,
+          "scriptMetrics": {
+            "totalSteps": 963,
+            "doCalls": 37,
+            "ifEvals": 3,
+            "loopIterations": 18,
+            "forkLaunches": 1,
+            "waitFrames": 837,
+            "joinWaitFrames": 63,
+            "done": false,
+            "aborted": false,
+            "idx": 67
+          }
+        }
+      ],
+      "serializePct": 25.53,
+      "avgUpdateMs": 0.0033,
+      "updateMs": 2.998,
+      "serializeMs": 1.001,
+      "frames": 900,
+      "serializePctStdDev": 2.8416,
+      "avgUpdateMsStdDev": 0.000216,
+      "scriptMetrics": {
+        "totalSteps": 963,
+        "totalStepsStdDev": 0,
+        "doCalls": 37,
+        "doCallsStdDev": 0,
+        "ifEvals": 3,
+        "ifEvalsStdDev": 0,
+        "loopIterations": 18,
+        "loopIterationsStdDev": 0,
+        "forkLaunches": 1,
+        "forkLaunchesStdDev": 0,
+        "waitFrames": 837,
+        "waitFramesStdDev": 0,
+        "joinWaitFrames": 63,
+        "joinWaitFramesStdDev": 0,
+        "idx": 67,
+        "idxStdDev": 0
+      }
+    },
+    {
+      "pattern": "phase-fork-demo",
+      "seed": "alt-seed",
+      "samples": [
+        {
+          "pattern": "phase-fork-demo",
+          "seed": "alt-seed",
+          "frames": 900,
+          "updateMs": 3.192,
+          "serializeMs": 1.002,
+          "avgUpdateMs": 0.0035,
+          "avgSerializeMs": 0.0011,
+          "serializePct": 23.9,
+          "scriptMetrics": {
+            "totalSteps": 963,
+            "doCalls": 37,
+            "ifEvals": 3,
+            "loopIterations": 18,
+            "forkLaunches": 1,
+            "waitFrames": 837,
+            "joinWaitFrames": 63,
+            "done": false,
+            "aborted": false,
+            "idx": 67
+          }
+        },
+        {
+          "pattern": "phase-fork-demo",
+          "seed": "alt-seed",
+          "frames": 900,
+          "updateMs": 3.012,
+          "serializeMs": 1.052,
+          "avgUpdateMs": 0.0033,
+          "avgSerializeMs": 0.0012,
+          "serializePct": 25.88,
+          "scriptMetrics": {
+            "totalSteps": 963,
+            "doCalls": 37,
+            "ifEvals": 3,
+            "loopIterations": 18,
+            "forkLaunches": 1,
+            "waitFrames": 837,
+            "joinWaitFrames": 63,
+            "done": false,
+            "aborted": false,
+            "idx": 67
+          }
+        },
+        {
+          "pattern": "phase-fork-demo",
+          "seed": "alt-seed",
+          "frames": 900,
+          "updateMs": 2.825,
+          "serializeMs": 1.02,
+          "avgUpdateMs": 0.0031,
+          "avgSerializeMs": 0.0011,
+          "serializePct": 26.53,
+          "scriptMetrics": {
+            "totalSteps": 963,
+            "doCalls": 37,
+            "ifEvals": 3,
+            "loopIterations": 18,
+            "forkLaunches": 1,
+            "waitFrames": 837,
+            "joinWaitFrames": 63,
+            "done": false,
+            "aborted": false,
+            "idx": 67
+          }
+        }
+      ],
+      "serializePct": 25.88,
+      "avgUpdateMs": 0.0033,
+      "updateMs": 3.012,
+      "serializeMs": 1.02,
+      "frames": 900,
+      "serializePctStdDev": 1.1185,
+      "avgUpdateMsStdDev": 0.000163,
+      "scriptMetrics": {
+        "totalSteps": 963,
+        "totalStepsStdDev": 0,
+        "doCalls": 37,
+        "doCallsStdDev": 0,
+        "ifEvals": 3,
+        "ifEvalsStdDev": 0,
+        "loopIterations": 18,
+        "loopIterationsStdDev": 0,
+        "forkLaunches": 1,
+        "forkLaunchesStdDev": 0,
+        "waitFrames": 837,
+        "waitFramesStdDev": 0,
+        "joinWaitFrames": 63,
+        "joinWaitFramesStdDev": 0,
+        "idx": 67,
+        "idxStdDev": 0
+      }
+    },
+    {
+      "pattern": "spiral-barrage",
+      "seed": "attrib-phase",
+      "samples": [
+        {
+          "pattern": "spiral-barrage",
+          "seed": "attrib-phase",
+          "frames": 300,
+          "updateMs": 0.967,
+          "serializeMs": 0.08,
+          "avgUpdateMs": 0.0032,
+          "avgSerializeMs": 0.0003,
+          "serializePct": 7.68
+        },
+        {
+          "pattern": "spiral-barrage",
+          "seed": "attrib-phase",
+          "frames": 300,
+          "updateMs": 1.093,
+          "serializeMs": 0.096,
+          "avgUpdateMs": 0.0036,
+          "avgSerializeMs": 0.0003,
+          "serializePct": 8.04
+        },
+        {
+          "pattern": "spiral-barrage",
+          "seed": "attrib-phase",
+          "frames": 300,
+          "updateMs": 0.932,
+          "serializeMs": 0.069,
+          "avgUpdateMs": 0.0031,
+          "avgSerializeMs": 0.0002,
+          "serializePct": 6.9
+        }
+      ],
+      "serializePct": 7.68,
+      "avgUpdateMs": 0.0032,
+      "updateMs": 0.967,
+      "serializeMs": 0.08,
+      "frames": 300,
+      "serializePctStdDev": 0.4758,
+      "avgUpdateMsStdDev": 0.000216
+    },
+    {
+      "pattern": "spiral-barrage",
+      "seed": "alt-seed",
+      "samples": [
+        {
+          "pattern": "spiral-barrage",
+          "seed": "alt-seed",
+          "frames": 300,
+          "updateMs": 0.904,
+          "serializeMs": 0.097,
+          "avgUpdateMs": 0.003,
+          "avgSerializeMs": 0.0003,
+          "serializePct": 9.68
+        },
+        {
+          "pattern": "spiral-barrage",
+          "seed": "alt-seed",
+          "frames": 300,
+          "updateMs": 1.102,
+          "serializeMs": 0.063,
+          "avgUpdateMs": 0.0037,
+          "avgSerializeMs": 0.0002,
+          "serializePct": 5.4
+        },
+        {
+          "pattern": "spiral-barrage",
+          "seed": "alt-seed",
+          "frames": 300,
+          "updateMs": 0.981,
+          "serializeMs": 0.077,
+          "avgUpdateMs": 0.0033,
+          "avgSerializeMs": 0.0003,
+          "serializePct": 7.29
+        }
+      ],
+      "serializePct": 7.29,
+      "avgUpdateMs": 0.0033,
+      "updateMs": 0.981,
+      "serializeMs": 0.077,
+      "frames": 300,
+      "serializePctStdDev": 1.7513,
+      "avgUpdateMsStdDev": 0.000287
+    }
+  ]
+}

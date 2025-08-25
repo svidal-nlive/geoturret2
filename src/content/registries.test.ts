@@ -13,6 +13,20 @@ describe('Registries placeholder content', () => {
   });
   it('contains expected boss patterns', () => {
     const snap = Registries.snapshot();
-    expect(snap.bossPatterns.sort()).toEqual(['future-converge','laser-cross','multi-beam-intersect','safe-lane-volley']);
+  expect(snap.bossPatterns.sort()).toEqual(['future-converge','laser-cross','multi-beam-intersect','safe-lane-volley','spiral-barrage']);
+  });
+  it('enemy metadata populated', () => {
+    const grunt = Registries.getEnemy('grunt');
+    expect(grunt?.role).toBe('basic');
+    expect(grunt?.bounty).toBeGreaterThan(0);
+  });
+  it('upgrade categories set', () => {
+    const dmg = Registries.getUpgrade('damage+');
+    expect(dmg?.category).toBe('offense');
+    expect(dmg?.maxTier).toBe(5);
+  });
+  it('wave mod excludes and tags', () => {
+    const gravity = Registries.getWaveMod('gravity');
+    expect(gravity?.excludes).toContain('storm');
   });
 });

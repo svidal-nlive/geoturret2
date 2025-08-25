@@ -26,7 +26,7 @@ async function ensureBuild() {
 
 function parseArgs() {
   const args = process.argv.slice(2);
-  const out = { frames: 2000, seeds: ['a','b','c','d','e'], kind: 'bullet', histBins: 256, histCap: 2 };
+  const out = { frames: 2000, seeds: ['a','b','c','d','e'], kind: 'bullet', histBins: 256, histCap: 2, robustSpike: false, spikeTrim: 1 };
   for (let i=0;i<args.length;i++) {
     const a = args[i];
     if (a === '--frames') out.frames = Number(args[++i]||out.frames);
@@ -34,6 +34,8 @@ function parseArgs() {
     else if (a === '--kind') out.kind = args[++i]||out.kind;
     else if (a === '--hist-bins') out.histBins = Number(args[++i]||out.histBins);
     else if (a === '--hist-cap') out.histCap = Number(args[++i]||out.histCap);
+    else if (a === '--robust-spike') out.robustSpike = true;
+    else if (a === '--spike-trim') out.spikeTrim = Number(args[++i]||out.spikeTrim);
   }
   return out;
 }
@@ -67,9 +69,9 @@ function makePercentileFromHist(hist) {
   };
 }
 
-function deriveThreshold(sys) {
+function deriveThreshold(sys, robustOpts) {
   // sys has streaming stats: count, sum, sumSquares, minObserved, maxObserved, hist
-  const { count, sum, sumSquares, minObserved: min, maxObserved: max, hist } = sys;
+  const { count, sum, sumSquares, minObserved: min, maxObserved: rawMax, hist, topSamples } = sys;
   if (!count) return { avg:0,min:0,max:0,p90:0,p95:0,p99:0,std:0,avgThreshold:0,spikeThreshold:0 };
   const avg = sum / count;
   const variance = (sumSquares / count) - avg*avg;
@@ -78,6 +80,14 @@ function deriveThreshold(sys) {
   const p90 = pct(0.90);
   const p95 = pct(0.95);
   const p99 = pct(0.99);
+  // Determine trimmed max if robust mode enabled
+  let max = rawMax;
+  let trimmed = [];
+  if (robustOpts?.robustSpike && topSamples && topSamples.length > robustOpts.spikeTrim) {
+    // topSamples kept descending; skip first spikeTrim entries
+    trimmed = topSamples.slice(0, robustOpts.spikeTrim);
+    max = topSamples[robustOpts.spikeTrim];
+  }
   const avgThreshold = +(Math.max(p95*1.25, avg + 3*std)).toFixed(4);
   const tailRatio = p99 > 0 ? max / p99 : 1;
   let maxMult = 1.5;
@@ -88,7 +98,7 @@ function deriveThreshold(sys) {
   if (tailRatio > 80) maxMult = 9;
   if (tailRatio > 120) maxMult = 12;
   const spikeThreshold = +(Math.max(p99*1.1, p95*1.5, max*maxMult)).toFixed(4);
-  return { avg, min, max, p90, p95, p99, std, avgThreshold, spikeThreshold };
+  return { avg, min, max, rawMax, trimmedTop: trimmed, p90, p95, p99, std, avgThreshold, spikeThreshold };
 }
 
 // Dynamic histogram helper: supports on-the-fly cap expansion with approximate re-binning.
@@ -159,6 +169,20 @@ async function run() {
             sys.sumSquares += v*v;
             if (v < sys.minObserved) sys.minObserved = v;
             if (v > sys.maxObserved) sys.maxObserved = v;
+            // Maintain top samples (descending) up to spikeTrim+5 for robustness.
+            if (!sys.topSamples) sys.topSamples = [];
+            const cap =  (globalThis.__robustSpikeConfig?.spikeTrim || 1) + 5;
+            // Insert while keeping desc order
+            const arr = sys.topSamples;
+            if (arr.length === 0 || v >= arr[arr.length-1] || arr.length < cap) {
+              // simple insertion sort
+              let inserted = false;
+              for (let j=0;j<arr.length;j++) {
+                if (v > arr[j]) { arr.splice(j,0,v); inserted = true; break; }
+              }
+              if (!inserted) arr.push(v);
+              if (arr.length > cap) arr.length = cap;
+            }
             sys.hist.addSample(v);
         }
       }
@@ -169,9 +193,11 @@ async function run() {
   }
   // Derive thresholds
   const output = { meta: aggregate.meta, systems: {}, thresholds: {} };
+  // Provide robust config globally for streaming top sample capture
+  globalThis.__robustSpikeConfig = { robustSpike: opts.robustSpike, spikeTrim: opts.spikeTrim };
   for (const [id, data] of Object.entries(aggregate.systems)) {
-    const stats = deriveThreshold(data);
-    output.systems[id] = { ...stats, hist: { bins: data.hist.counts, binWidth: data.hist.binWidth, cap: opts.histCap } };
+    const stats = deriveThreshold(data, { robustSpike: opts.robustSpike, spikeTrim: opts.spikeTrim });
+    output.systems[id] = { ...stats, hist: { bins: data.hist.counts, binWidth: data.hist.binWidth, cap: opts.histCap }, robustSpike: opts.robustSpike, spikeTrim: opts.spikeTrim };
     output.thresholds[id] = { avg: stats.avgThreshold, spike: stats.spikeThreshold };
   }
   // Memory thresholds
